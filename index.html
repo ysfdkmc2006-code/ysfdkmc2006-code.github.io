@@ -203,6 +203,10 @@ button { font: inherit; color: inherit; }
 .wrap { max-width: 74rem; margin: 0 auto; }
 .split { display: grid; grid-template-columns: minmax(0, .8fr) minmax(0, 1.6fr); gap: clamp(2rem, 6vw, 6rem); }
 .split .intro { color: var(--bone-2); max-width: 24rem; margin: 0; }
+.burrow { display: block; width: min(100%, 230px); height: auto; margin-top: 2.5rem; }
+.burrow .fl { transform-box: fill-box; transform-origin: center; animation: drift-fall 4.5s ease-in-out infinite alternate; animation-delay: var(--d); }
+@keyframes drift-fall { from { transform: translateY(-5px) rotate(-3deg); } to { transform: translateY(6px) rotate(3deg); } }
+@media (prefers-reduced-motion: reduce) { .burrow .fl { animation: none; } }
 .rows { margin: 0; padding: 0; list-style: none; }
 .rows li { display: grid; grid-template-columns: 10rem minmax(0, 1fr); gap: 1.5rem; padding: 1.35rem 0; border-top: 1px solid rgba(242, 235, 231, .12); }
 .rows li:first-child { border-top: 0; padding-top: 0; }
@@ -330,6 +334,7 @@ footer p { margin: .2rem auto; max-width: 74rem; }
   .card { position: relative; left: auto; top: auto; margin: 0; transform: none; flex: none; --w: 9.5rem; scroll-snap-align: center; animation: none; }
   .card:hover, .card:focus-visible { transform: translateY(-6px); }
   .split { grid-template-columns: 1fr; }
+  .burrow { display: none; }
   .rows li { grid-template-columns: 1fr; gap: .2rem; }
   .sheet-body { grid-template-columns: 1fr; overflow: auto; }
   .notes { border-right: 0; border-top: 1px solid rgba(232, 103, 159, .22); order: 2; overflow: visible; }
@@ -477,6 +482,88 @@ footer p { margin: .2rem auto; max-width: 74rem; }
     <div>
       <h2 id="work-h" data-i18n="workH">Other work</h2>
       <p class="intro" data-i18n="workIntro">Subtitles for national television, a full web novel, and years of community translation.</p>
+      <svg class="burrow" viewBox="0 0 260 900" aria-hidden="true">
+<path d="M0 0h38c-8 80 14 140-4 220-14 80 14 140-4 240-12 80 14 160-2 260-8 80 12 140 4 180H0Z" fill="#170910"/>
+<path d="M260 0h-38c10 90-14 160 4 240 16 70-12 150 6 230 14 80-10 150 4 250 10 70-8 130 2 180h22Z" fill="#170910"/>
+<path d="M38 0c-8 80 14 140-4 220-14 80 14 140-4 240-12 80 14 160-2 260-8 80 12 140 4 180M222 0c10 90-14 160 4 240 16 70-12 150 6 230 14 80-10 150 4 250 10 70-8 130 2 180" fill="none" stroke="#b0386f" stroke-opacity=".7" stroke-width="1.6" stroke-linejoin="round"/>
+<g fill="none" stroke="#2a0d17" stroke-width="2" stroke-linecap="round">
+<path d="M36 120c14 6 18 18 30 18M34 380c12-2 20 8 32 4M30 760c16 4 22 16 34 14"/>
+<path d="M224 70c-14 4-16 16-30 16M226 330c-12 0-18 12-30 10M224 620c-14-2-20 10-32 8"/>
+</g>
+<g stroke="#0d0608" stroke-width="1.8" stroke-linejoin="round">
+<rect x="34" y="208" width="52" height="5" fill="#3a1420"/>
+<rect x="40" y="186" width="7" height="22" fill="#5e0c1a"/><rect x="48" y="190" width="6" height="18" fill="#b0386f"/><rect x="55" y="184" width="8" height="24" fill="#bdaea9"/>
+<path d="M64 208l10-20 6 3-10 20Z" fill="#a3172f"/>
+<rect x="176" y="500" width="50" height="5" fill="#3a1420"/>
+<rect x="182" y="482" width="13" height="18" rx="3" fill="#bdaea9"/><rect x="182" y="479" width="13" height="4" fill="#b0386f"/>
+<rect x="200" y="486" width="11" height="14" rx="3" fill="#bdaea9"/><rect x="200" y="483" width="11" height="4" fill="#a3172f"/>
+<rect x="28" y="620" width="40" height="48" rx="2" fill="#3a1420"/>
+</g>
+<rect x="33" y="625" width="30" height="38" fill="none" stroke="#b0386f" stroke-width="1.5" stroke-dasharray="2 2"/>
+<g transform="translate(40 636) scale(.8)"><path d="M10 18C4 13 1 10 1 6.2 1 3.5 3 1.6 5.6 1.6c2 0 3.5 1.2 4.4 2.8.9-1.6 2.4-2.8 4.4-2.8C17 1.6 19 3.5 19 6.2 19 10 16 13 10 18Z" fill="#a3172f"/></g>
+<g stroke="#e8679f" stroke-width="1.5" stroke-linecap="round" opacity=".28">
+<path d="M90 30v28M176 130v34M70 300v26M196 380v30M84 560v28M182 650v34M100 740v24"/>
+</g>
+<g transform="rotate(-15 120 90)"><g class="fl" style="--d:0s">
+<path d="M120 62c-6-20 10-36 24-52" fill="none" stroke="#bdaea9" stroke-width="1.6" stroke-dasharray="3 3"/>
+<rect x="115" y="56" width="10" height="8" rx="2" fill="#5e0c1a" stroke="#0d0608" stroke-width="1.8" stroke-linejoin="round"/>
+<circle cx="120" cy="90" r="26" fill="#5e0c1a" stroke="#0d0608" stroke-width="1.8" stroke-linejoin="round"/>
+<circle cx="120" cy="90" r="20" fill="#bdaea9" stroke="#0d0608" stroke-width="1.8" stroke-linejoin="round"/>
+<path d="M120 72v4M120 104v4M102 90h4M134 90h4M120 90v-12M120 90l8 5" stroke="#0d0608" stroke-width="2" stroke-linecap="round"/>
+</g></g>
+<g transform="rotate(12 152 190)"><g class="fl" style="--d:-1.2s">
+<rect x="134" y="168" width="36" height="44" rx="7" fill="#5e0c1a" stroke="#0d0608" stroke-width="1.8" stroke-linejoin="round"/>
+<rect x="132" y="162" width="40" height="8" rx="2" fill="#b0386f" stroke="#0d0608" stroke-width="1.8" stroke-linejoin="round"/>
+<rect x="138" y="180" width="28" height="18" fill="#bdaea9" stroke="#0d0608" stroke-width="1.8" stroke-linejoin="round"/>
+<text x="152" y="188" font-family="Georgia, serif" font-size="5.2" text-anchor="middle" fill="#0d0608">ORANGE</text>
+<text x="152" y="195" font-family="Georgia, serif" font-size="4.2" text-anchor="middle" fill="#0d0608">MARMALADE</text>
+</g></g>
+<g class="fl" style="--d:-2.1s">
+<g stroke="#0d0608" stroke-width="1.8" stroke-linejoin="round">
+<rect x="82" y="262" width="26" height="36" rx="3" fill="#bdaea9" transform="rotate(-25 95 280)"/>
+<rect x="124" y="276" width="26" height="36" rx="3" fill="#bdaea9" transform="rotate(15 137 294)"/>
+<rect x="102" y="306" width="26" height="36" rx="3" fill="#bdaea9" transform="rotate(-6 115 324)"/>
+</g>
+<g transform="translate(88 273) scale(.6)"><path d="M10 1 17.5 10 10 19 2.5 10Z" fill="#a3172f"/></g>
+<g transform="translate(131 287) scale(.6)"><path d="M10 1.5a4 4 0 0 1 3.2 6.4 4 4 0 1 1-1.6 6.9c.3 1.8 1 3 2.4 4.2H6c1.4-1.2 2.1-2.4 2.4-4.2a4 4 0 1 1-1.6-6.9A4 4 0 0 1 10 1.5Z" fill="#0d0608"/></g>
+<g transform="translate(109 318) scale(.6)"><path d="M10 18C4 13 1 10 1 6.2 1 3.5 3 1.6 5.6 1.6c2 0 3.5 1.2 4.4 2.8.9-1.6 2.4-2.8 4.4-2.8C17 1.6 19 3.5 19 6.2 19 10 16 13 10 18Z" fill="#a3172f"/></g>
+</g>
+<g transform="rotate(10 150 400)"><g class="fl" style="--d:-.6s">
+<path d="M134 430h32l-4-8h-24ZM140 422c2-14 4-28 2-38h16c-2 10 0 24 2 38Z" fill="#a3172f" stroke="#0d0608" stroke-width="1.8" stroke-linejoin="round"/>
+<path d="M140 384l-4-14 7 7 3-11 4 11 4-11 3 11 7-7-4 14Z" fill="#a3172f" stroke="#0d0608" stroke-width="1.8" stroke-linejoin="round"/>
+<circle cx="150" cy="364" r="3" fill="#e8679f" stroke="#0d0608" stroke-width="1.8" stroke-linejoin="round"/>
+<path d="M138 396h24" stroke="#0d0608" stroke-width="1.8"/>
+</g></g>
+<g transform="rotate(-8 110 480)"><g class="fl" style="--d:-1.7s">
+<path d="M84 476v18c0 8 52 8 52 0v-18Z" fill="#bdaea9" stroke="#0d0608" stroke-width="1.8" stroke-linejoin="round"/>
+<ellipse cx="110" cy="476" rx="26" ry="7" fill="#e8679f" stroke="#0d0608" stroke-width="1.8" stroke-linejoin="round"/>
+<path d="M86 478c4 6 8 0 12 6s8-2 12 4 8-2 12 4 8-4 12 0" fill="none" stroke="#e8679f" stroke-width="3" stroke-linecap="round"/>
+<g fill="#0d0608"><circle cx="96" cy="474" r="1.6"/><circle cx="108" cy="478" r="1.6"/><circle cx="120" cy="473" r="1.6"/></g>
+<rect x="96" y="486" width="28" height="9" fill="#f2ebe7" stroke="#0d0608" stroke-width="1"/>
+<text x="110" y="493" font-family="Georgia, serif" font-size="6" text-anchor="middle" fill="#0d0608">EAT ME</text>
+</g></g>
+<g transform="rotate(-32 150 560)"><g class="fl" style="--d:-2.6s">
+<circle cx="132" cy="560" r="9" fill="none" stroke="#0d0608" stroke-width="7"/><circle cx="132" cy="560" r="9" fill="none" stroke="#bdaea9" stroke-width="4"/>
+<path d="M141 560h34" stroke="#0d0608" stroke-width="7" stroke-linecap="round"/><path d="M141 560h34" stroke="#bdaea9" stroke-width="4" stroke-linecap="round"/>
+<path d="M166 560v9h4v-5h4v5h3v-9" fill="#bdaea9" stroke="#0d0608" stroke-width="1.8" stroke-linejoin="round"/>
+</g></g>
+<g transform="rotate(22 110 650)"><g class="fl" style="--d:-.3s">
+<path d="M110 676v26" stroke="#0d0608" stroke-width="8" stroke-linecap="round"/><path d="M110 676v26" stroke="#5e0c1a" stroke-width="5" stroke-linecap="round"/>
+<ellipse cx="110" cy="652" rx="20" ry="25" fill="#bdaea9" stroke="#0d0608" stroke-width="1.8" stroke-linejoin="round"/>
+<ellipse cx="110" cy="652" rx="14" ry="19" fill="#b0386f" stroke="#0d0608" stroke-width="1.2"/>
+<path d="M102 642c4-6 10-8 14-6" stroke="#f2ebe7" stroke-width="2" fill="none" stroke-linecap="round" opacity=".8"/>
+</g></g>
+<g transform="rotate(-12 152 730)"><g class="fl" style="--d:-1.4s">
+<path d="M136 760h32l-4-8h-24ZM142 752c2-14 4-26 2-36h16c-2 10 0 22 2 36Z" fill="#0b0407" stroke="#b0386f" stroke-opacity=".7" stroke-width="1.6" stroke-linejoin="round"/>
+<path d="M142 716l-2-10h24l-2 10Z" fill="#0b0407" stroke="#b0386f" stroke-opacity=".7" stroke-width="1.6" stroke-linejoin="round"/>
+<path d="M152 706v-14M146 698h12" stroke="#b0386f" stroke-width="3" stroke-linecap="round"/>
+</g></g>
+<ellipse cx="130" cy="850" rx="70" ry="44" fill="#e8679f" opacity=".12"/>
+<path d="M106 900v-62c0-16 10-26 24-26s24 10 24 26v62Z" fill="#3a1420" stroke="#e8679f" stroke-width="2"/>
+<path d="M112 900v-58c0-12 8-20 18-20s18 8 18 20v58" fill="none" stroke="#b0386f" stroke-width="1.2"/>
+<circle cx="144" cy="864" r="2.5" fill="#bdaea9"/>
+<path d="M127 854a3 3 0 1 1 6 0l-1 10h-4Z" fill="#0d0608"/>
+</svg>
     </div>
     <div>
       <ul class="rows">
