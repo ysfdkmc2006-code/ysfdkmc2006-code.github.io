@@ -1,0 +1,740 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Yusuf Dökmeci, game localization</title>
+<meta name="description" content="Yusuf Dökmeci, English to Turkish game localization, subtitling and fiction translation. Six translated scenes from a dark fairy-tale RPG.">
+<meta property="og:title" content="Yusuf Dökmeci, game localization">
+<meta property="og:description" content="English to Turkish game localization, subtitling and fiction translation.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Jacquard+24&family=M+PLUS+1+Code:wght@400;500&family=Alegreya+Sans:ital,wght@0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ground: #1a0b11;
+  --ground-2: #24101a;
+  --tile: #2c0f19;
+  --ink: #0d0608;
+  --blood: #a3172f;
+  --blood-d: #5e0c1a;
+  --lace: #e8679f;
+  --lace-d: #b0386f;
+  --bone: #f2ebe7;
+  --bone-2: #cdbfbb;
+  --hi: #ff7d93;
+  --display: "Jacquard 24", "Pirata One", "Times New Roman", serif;
+  --game: "M PLUS 1 Code", "MS Gothic", "Consolas", monospace;
+  --body: "Alegreya Sans", "Gill Sans", "Segoe UI", system-ui, sans-serif;
+  color-scheme: dark;
+  box-sizing: border-box;
+  padding-top: env(safe-area-inset-top, 0px);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) { --ground: #150a0e; --ground-2: #1f0d15; --tile: #280d17; }
+}
+:root[data-theme="dark"] { --ground: #150a0e; --ground-2: #1f0d15; --tile: #280d17; }
+*, *::before, *::after { box-sizing: inherit; }
+html { height: 100%; scroll-padding-top: env(safe-area-inset-top, 0px); scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+body {
+  margin: 0; min-height: 100%;
+  background: var(--ground); color: var(--bone);
+  font-family: var(--body); font-size: 1.15rem; line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  scrollbar-color: var(--lace-d) var(--ink);
+}
+::selection { background: var(--lace); color: var(--ink); }
+a { color: inherit; text-underline-offset: .2em; text-decoration-color: var(--lace-d); }
+a:hover { color: var(--lace); }
+:focus-visible { outline: 2px solid var(--lace); outline-offset: 3px; border-radius: 3px; }
+button { font: inherit; color: inherit; }
+.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+/* ground: the red-black spade checker from the game window, dimmed */
+.ground {
+  position: relative; isolation: isolate; overflow: hidden;
+  background-color: var(--ground);
+}
+.tiles { position: absolute; inset: 0; z-index: -2; overflow: hidden; pointer-events: none; }
+.tiles span { position: absolute; inset: -256px; will-change: transform; }
+.tiles .l1 { background-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2264%22%20height%3D%2264%22%3E%3Cpath%20d%3D%22M32%200%2064%2032%2032%2064%200%2032Z%22%20fill%3D%22%232a0d17%22%2F%3E%3Cg%20transform%3D%22translate%2826%2026%29%20scale%28.6%29%22%3E%3Cpath%20d%3D%22M10%201c3%204.5%209%207.5%209%2011.5%200%202.5-1.8%204.1-4%204.1-1.4%200-2.6-.6-3.4-1.6.3%201.8%201%203%202.4%204H6c1.4-1%202.1-2.2%202.4-4-.8%201-2%201.6-3.4%201.6-2.2%200-4-1.6-4-4.1C1%208.5%207%205.5%2010%201Z%22%20fill%3D%22%23160a0e%22%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E"); background-size: 64px 64px; animation: drift 9s linear infinite; }
+.tiles .l2 { background-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22128%22%20height%3D%22128%22%3E%3Cpath%20d%3D%22M64%204%20124%2064%2064%20124%204%2064Z%22%20fill%3D%22none%22%20stroke%3D%22%23e8679f%22%20stroke-width%3D%222%22%2F%3E%3C%2Fsvg%3E"); background-size: 128px 128px; animation: drift-back 16s linear infinite, breathe 5.5s ease-in-out infinite alternate; opacity: .1; }
+.tiles .l3 { background-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22128%22%20height%3D%22128%22%3E%3Cpath%20d%3D%22M64%204%20124%2064%2064%20124%204%2064Z%22%20fill%3D%22none%22%20stroke%3D%22%23e8679f%22%20stroke-width%3D%222%22%2F%3E%3C%2Fsvg%3E"); background-size: 128px 128px; background-position: 64px 64px; animation: drift-back 16s linear infinite, breathe 5.5s ease-in-out -2.75s infinite alternate; opacity: .1; }
+@keyframes drift { to { transform: translate(64px, 64px); } }
+@keyframes drift-back { to { transform: translate(-128px, 128px); } }
+@keyframes breathe { from { opacity: .02; } to { opacity: .2; } }
+@media (prefers-reduced-motion: reduce) { .tiles span { animation: none; } }
+.ground::before {
+  content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none;
+  background: radial-gradient(120% 90% at 30% 35%, transparent 30%, rgba(8,3,5,.82) 100%);
+}
+
+/* top bar */
+.bar {
+  display: flex; justify-content: flex-end; align-items: center; gap: 1.5rem;
+  padding: 1.25rem clamp(1.25rem, 4vw, 3.5rem) 0;
+  font-size: 1rem;
+}
+.bar a { text-decoration: none; color: var(--bone-2); }
+.bar a:hover { color: var(--lace); }
+.lang { display: inline-flex; border: 1px solid var(--lace-d); border-radius: 999px; padding: 2px; }
+.lang button {
+  background: none; border: 0; border-radius: 999px; padding: .2rem .7rem; cursor: pointer;
+  color: var(--bone-2); font-size: .95rem; letter-spacing: .02em;
+}
+.lang button[aria-pressed="true"] { background: var(--lace); color: var(--ink); font-weight: 700; }
+
+.sound {
+  display: inline-flex; align-items: center; gap: .45rem; height: 2.2rem; padding: 0 .75rem; cursor: pointer;
+  border-radius: 999px; border: 1px solid var(--lace-d); background: transparent; color: var(--bone-2);
+}
+.sound svg { width: 1.05rem; height: 1.05rem; }
+.sound:hover { color: var(--lace); border-color: var(--lace); }
+.sound[aria-pressed="true"] { background: var(--lace); color: var(--ink); border-color: var(--lace); }
+.sound[hidden] { display: none; }
+.bars { display: inline-flex; align-items: flex-end; gap: 2px; height: .8rem; }
+.bars i { width: 2px; height: 30%; background: currentColor; border-radius: 1px; }
+.sound[aria-pressed="true"] .bars i { animation: eq .9s ease-in-out infinite alternate; }
+.sound[aria-pressed="true"] .bars i:nth-child(2) { animation-delay: -.3s; }
+.sound[aria-pressed="true"] .bars i:nth-child(3) { animation-delay: -.6s; }
+@keyframes eq { from { height: 25%; } to { height: 100%; } }
+@media (prefers-reduced-motion: reduce) { .sound[aria-pressed="true"] .bars i { animation: none; height: 70%; } }
+
+/* hero */
+.hero {
+  display: grid; grid-template-columns: minmax(0, .85fr) minmax(0, 1.15fr);
+  gap: clamp(1rem, 3vw, 3rem); align-items: center;
+  min-height: min(calc(100svh - 4rem), 980px);
+  padding: clamp(1rem, 3vw, 2rem) clamp(1.25rem, 4vw, 3.5rem) clamp(9rem, 14vw, 12rem);
+}
+.hero h1 {
+  font-family: var(--display); font-weight: 400;
+  font-size: clamp(3.6rem, 7.4vw, 6rem); line-height: .86; margin: 0 0 1.4rem;
+  letter-spacing: -.01em; color: var(--bone);
+  text-shadow: 0 6px 24px rgba(0,0,0,.55);
+}
+.hero h1 span { display: block; }
+.hero h1 span + span { color: var(--lace); }
+.role { font-family: var(--game); font-size: 1.15rem; color: var(--bone); margin: 0 0 1rem; }
+.lede { max-width: 33rem; color: var(--bone-2); margin: 0 0 2rem; }
+.actions { display: flex; flex-wrap: wrap; gap: .8rem; }
+.btn {
+  display: inline-flex; align-items: center; gap: .55rem; cursor: pointer;
+  padding: .7rem 1.2rem; border-radius: 8px; text-decoration: none;
+  border: 2px solid var(--lace); background: var(--ink); color: var(--bone);
+  font-family: var(--body); font-size: 1.02rem; font-weight: 500;
+  box-shadow: 0 6px 18px -6px rgba(0,0,0,.7);
+  transition: background .18s ease, color .18s ease;
+}
+.btn svg { width: 1.05em; height: 1.05em; flex: none; }
+.btn:hover { background: var(--lace); color: var(--ink); }
+.btn.quiet { border-color: var(--bone-2); background: transparent; }
+.btn.quiet:hover { background: var(--bone); color: var(--ink); border-color: var(--bone); }
+.btn[disabled] { opacity: .55; cursor: default; }
+
+/* the deck */
+.table { position: relative; display: flex; flex-direction: column; align-items: center; }
+.fan { position: relative; width: min(100%, 680px); height: clamp(340px, 34vw, 430px); }
+.card {
+  --w: clamp(150px, 13.4vw, 196px);
+  position: absolute; left: 50%; top: 18%;
+  width: var(--w); aspect-ratio: 5 / 7; margin-left: calc(var(--w) / -2);
+  padding: 0; border: 0; background: none; cursor: pointer;
+  transform-origin: 50% 135%;
+  transform: translate(var(--tx), var(--ty)) rotate(var(--rot));
+  transition: transform .45s cubic-bezier(.16, 1, .3, 1), filter .3s ease;
+  animation: deal .8s cubic-bezier(.16, 1, .3, 1) backwards;
+  animation-delay: calc(var(--i) * 70ms + 150ms);
+  filter: drop-shadow(0 14px 20px rgba(0,0,0,.6));
+}
+.card:hover, .card:focus-visible {
+  transform: translate(var(--tx), calc(var(--ty) - 34px)) rotate(calc(var(--rot) * .55));
+  z-index: 10; outline: none;
+}
+.card:focus-visible .face { box-shadow: 0 0 0 3px var(--ground), 0 0 0 6px var(--lace); }
+@keyframes deal { from { transform: translate(0, 50px) rotate(0deg); opacity: 0; } }
+@media (prefers-reduced-motion: reduce) { .card { animation: none; transition: none; } }
+.pick { font-family: var(--game); color: var(--bone-2); font-size: 1rem; margin: 1.2rem 0 0; }
+
+.face {
+  position: absolute; inset: 0; border-radius: 12px; overflow: hidden;
+  background: var(--bone); color: var(--ink);
+  display: grid; grid-template-rows: auto 1fr auto; padding: 9% 9% 8%;
+}
+.face .art-wrap { position: relative; margin: 0 6%; border-radius: 6px; overflow: hidden; border: 2.5px solid var(--ink); }
+.face .art { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.idx { position: absolute; display: flex; flex-direction: column; align-items: center; line-height: 1; }
+.idx b { font-family: var(--body); font-weight: 700; font-size: clamp(1.25rem, 1.7vw, 1.7rem); }
+.idx svg { width: clamp(.85rem, 1vw, 1.05rem); height: auto; margin-top: .1rem; }
+.idx.tl { top: 5%; left: 6%; }
+.idx.br { bottom: 5%; right: 6%; transform: rotate(180deg); }
+.idx.red { color: var(--blood); }
+.joker { font-family: var(--display); font-size: clamp(.9rem, 1.15vw, 1.15rem); writing-mode: vertical-rl; text-orientation: upright; letter-spacing: -.12em; line-height: 1; }
+.face .ttl {
+  font-family: var(--display); font-size: clamp(1rem, 1.25vw, 1.3rem); line-height: 1;
+  text-align: center; padding: .6em 12% 0; min-height: 2.2em; display: flex; align-items: center; justify-content: center;
+  text-wrap: balance;
+}
+.spacer { height: 6%; }
+
+.horizon { position: absolute; left: 0; right: 0; bottom: -2px; width: 100%; height: clamp(110px, 14vw, 200px); pointer-events: none; }
+
+/* sections */
+.section { padding: clamp(4rem, 9vw, 7rem) clamp(1.25rem, 4vw, 3.5rem); background: #0b0507; }
+.section + .section { border-top: 1px solid rgba(232, 103, 159, .18); }
+.section h2 {
+  font-family: var(--display); font-weight: 400; font-size: clamp(2.6rem, 5vw, 4rem); line-height: .95;
+  margin: 0 0 1.25rem; color: var(--bone);
+}
+.wrap { max-width: 74rem; margin: 0 auto; }
+.split { display: grid; grid-template-columns: minmax(0, .8fr) minmax(0, 1.6fr); gap: clamp(2rem, 6vw, 6rem); }
+.split .intro { color: var(--bone-2); max-width: 24rem; margin: 0; }
+.rows { margin: 0; padding: 0; list-style: none; }
+.rows li { display: grid; grid-template-columns: 10rem minmax(0, 1fr); gap: 1.5rem; padding: 1.35rem 0; border-top: 1px solid rgba(242, 235, 231, .12); }
+.rows li:first-child { border-top: 0; padding-top: 0; }
+.rows .when { color: var(--lace); font-family: var(--game); font-size: .95rem; padding-top: .2rem; }
+.rows h3 { font-size: 1.25rem; font-weight: 700; margin: 0 0 .25rem; line-height: 1.3; }
+.rows p { margin: 0; color: var(--bone-2); max-width: 60ch; }
+.kit { margin-top: 2.25rem; color: var(--bone-2); max-width: 60ch; }
+.kit p { margin: .35rem 0; }
+.kit strong { color: var(--bone); font-weight: 700; }
+
+.contact .mail {
+  display: inline-block; font-family: var(--body); font-weight: 500;
+  font-size: clamp(1.5rem, 3.6vw, 2.6rem); line-height: 1.15; color: var(--bone);
+  text-decoration-thickness: 2px; overflow-wrap: anywhere; margin: .25rem 0 2rem;
+}
+.contact .note { color: var(--bone-2); max-width: 44ch; margin: 0 0 1rem; }
+.status { min-height: 1.5em; font-size: 1rem; color: var(--bone-2); margin: .8rem 0 0; }
+footer { padding: 2rem clamp(1.25rem, 4vw, 3.5rem) 2.5rem; background: #0b0507; color: #9c8f8c; font-size: .95rem; border-top: 1px solid rgba(232, 103, 159, .18); }
+footer p { margin: .2rem auto; max-width: 74rem; }
+
+/* the reveal: card flips and fills the screen */
+.stage { position: fixed; inset: 0; z-index: 50; perspective: 2200px; }
+.stage[hidden] { display: none; }
+.scrim { position: absolute; inset: 0; background: rgba(6, 2, 4, .78); opacity: 0; transition: opacity .5s ease; }
+.stage.open .scrim { opacity: 1; }
+.flip {
+  position: absolute; transform-style: preserve-3d;
+  transition: left .9s cubic-bezier(.65, 0, .25, 1), top .9s cubic-bezier(.65, 0, .25, 1),
+              width .9s cubic-bezier(.65, 0, .25, 1), height .9s cubic-bezier(.65, 0, .25, 1),
+              transform .9s cubic-bezier(.65, 0, .25, 1);
+}
+.flip > .face { backface-visibility: hidden; -webkit-backface-visibility: hidden; }
+.sheet {
+  position: absolute; inset: 0; transform: rotateY(180deg);
+  backface-visibility: hidden; -webkit-backface-visibility: hidden;
+  border-radius: 14px; overflow: hidden;
+  background-color: #12070b; background-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2272%22%20height%3D%2272%22%3E%3Crect%20width%3D%2272%22%20height%3D%2272%22%20fill%3D%22%2312070b%22%2F%3E%3Cpath%20d%3D%22M36%200%2072%2036%2036%2072%200%2036Z%22%20fill%3D%22%234a0c18%22%2F%3E%3Cg%20transform%3D%22translate%2829%2029%29%20scale%28.7%29%22%3E%3Cpath%20d%3D%22M10%201c3%204.5%209%207.5%209%2011.5%200%202.5-1.8%204.1-4%204.1-1.4%200-2.6-.6-3.4-1.6.3%201.8%201%203%202.4%204H6c1.4-1%202.1-2.2%202.4-4-.8%201-2%201.6-3.4%201.6-2.2%200-4-1.6-4-4.1C1%208.5%207%205.5%2010%201Z%22%20fill%3D%22%2312070b%22%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E"); background-size: 72px 72px;
+  display: flex; flex-direction: column;
+  box-shadow: 0 30px 80px rgba(0,0,0,.6);
+}
+.sheet::before {
+  content: ""; position: absolute; inset: 10px; border-radius: 8px; pointer-events: none; z-index: 2;
+  border: 7px solid transparent; border-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2221%22%20height%3D%2221%22%3E%3Crect%20width%3D%2221%22%20height%3D%2221%22%20fill%3D%22%23e8679f%22%2F%3E%3Ccircle%20cx%3D%223.5%22%20cy%3D%223.5%22%20r%3D%221.7%22%20fill%3D%22%235e0c1a%22%2F%3E%3Ccircle%20cx%3D%223.5%22%20cy%3D%2210.5%22%20r%3D%221.7%22%20fill%3D%22%235e0c1a%22%2F%3E%3Ccircle%20cx%3D%223.5%22%20cy%3D%2217.5%22%20r%3D%221.7%22%20fill%3D%22%235e0c1a%22%2F%3E%3Ccircle%20cx%3D%2210.5%22%20cy%3D%223.5%22%20r%3D%221.7%22%20fill%3D%22%235e0c1a%22%2F%3E%3Ccircle%20cx%3D%2210.5%22%20cy%3D%2210.5%22%20r%3D%221.7%22%20fill%3D%22%235e0c1a%22%2F%3E%3Ccircle%20cx%3D%2210.5%22%20cy%3D%2217.5%22%20r%3D%221.7%22%20fill%3D%22%235e0c1a%22%2F%3E%3Ccircle%20cx%3D%2217.5%22%20cy%3D%223.5%22%20r%3D%221.7%22%20fill%3D%22%235e0c1a%22%2F%3E%3Ccircle%20cx%3D%2217.5%22%20cy%3D%2210.5%22%20r%3D%221.7%22%20fill%3D%22%235e0c1a%22%2F%3E%3Ccircle%20cx%3D%2217.5%22%20cy%3D%2217.5%22%20r%3D%221.7%22%20fill%3D%22%235e0c1a%22%2F%3E%3C%2Fsvg%3E") 7 round;
+}
+.sheet-in { position: relative; z-index: 1; flex: 1; min-height: 0; display: flex; flex-direction: column; margin: 17px; background: rgba(10, 4, 7, .55); border-radius: 4px; opacity: 0; transition: opacity .3s ease; }
+.stage.done .sheet-in { opacity: 1; }
+@media (prefers-reduced-motion: reduce) { .flip, .scrim, .sheet-in { transition: none; } }
+
+.sheet-head { display: flex; align-items: center; gap: 1rem; padding: 1.1rem 1.4rem; border-bottom: 1px solid rgba(232, 103, 159, .3); flex-wrap: wrap; }
+.mini { display: flex; flex-direction: column; align-items: center; justify-content: center; width: 3.2rem; height: 4.4rem; border-radius: 6px; background: var(--bone); color: var(--ink); flex: none; line-height: 1; }
+.mini b { font-family: var(--body); font-weight: 700; font-size: 1.5rem; }
+.mini.red { color: var(--blood); }
+.mini svg { width: 1rem; height: 1rem; }
+.mini .joker { font-size: .85rem; }
+.head-text { flex: 1; min-width: 14rem; }
+.head-text h2 { font-family: var(--display); font-weight: 400; font-size: clamp(1.9rem, 3.2vw, 2.8rem); line-height: 1; margin: 0; color: var(--bone); }
+.head-text p { margin: .3rem 0 0; color: var(--bone-2); font-size: 1rem; }
+.tools { display: flex; align-items: center; gap: .5rem; flex-wrap: wrap; }
+.icon-btn {
+  display: inline-grid; place-items: center; width: 2.6rem; height: 2.6rem; border-radius: 8px; cursor: pointer;
+  background: var(--ink); border: 1.5px solid var(--lace-d); color: var(--bone);
+}
+.icon-btn:hover { border-color: var(--lace); color: var(--lace); }
+.icon-btn svg { width: 1.2rem; height: 1.2rem; }
+.codes { display: inline-flex; align-items: center; gap: .55rem; cursor: pointer; background: none; border: 0; padding: .3rem .5rem; font-size: .98rem; color: var(--bone-2); }
+.codes .track { width: 2.4rem; height: 1.35rem; border-radius: 1rem; border: 1.5px solid var(--lace-d); position: relative; flex: none; }
+.codes .track::after { content: ""; position: absolute; top: 2px; left: 2px; width: calc(1.35rem - 7px); height: calc(1.35rem - 7px); border-radius: 50%; background: var(--bone-2); transition: transform .2s ease; }
+.codes[aria-pressed="true"] { color: var(--bone); }
+.codes[aria-pressed="true"] .track { background: var(--lace); border-color: var(--lace); }
+.codes[aria-pressed="true"] .track::after { transform: translateX(1.05rem); background: var(--ink); }
+
+.sheet-body { flex: 1; min-height: 0; display: grid; grid-template-columns: minmax(15rem, 19rem) minmax(0, 1fr); }
+.notes { padding: 1.4rem 1.4rem 1.6rem; border-right: 1px solid rgba(232, 103, 159, .22); overflow: auto; }
+.notes h3 { font-family: var(--body); font-size: 1.05rem; font-weight: 700; margin: 0 0 .8rem; color: var(--lace); }
+.notes ul { list-style: none; margin: 0; padding: 0; }
+.notes li { display: grid; grid-template-columns: 1rem minmax(0, 1fr); gap: .6rem; padding: .7rem 0; border-top: 1px solid rgba(242, 235, 231, .1); font-size: 1rem; color: var(--bone-2); line-height: 1.5; }
+.notes li svg { width: .8rem; height: .8rem; margin-top: .35rem; }
+.notes em { color: var(--bone); font-style: italic; }
+.notes code { font-family: var(--game); font-size: .9em; color: var(--hi); }
+.dialog { overflow: auto; padding: 2rem clamp(1rem, 3vw, 2.5rem) 2.5rem; display: flex; flex-direction: column; gap: 1.6rem; scrollbar-color: var(--lace-d) transparent; }
+
+.msg {
+  position: relative; max-width: 46rem; width: fit-content; min-width: min(100%, 18rem);
+  background: rgba(13, 6, 8, .9); color: var(--bone);
+  border: 2px solid var(--lace); border-radius: 6px;
+  box-shadow: inset 0 0 0 3px #12070b, inset 0 0 0 4px var(--lace-d), 0 10px 24px -8px rgba(0,0,0,.7);
+  padding: 1.15rem 1.35rem 1.05rem;
+  font-family: var(--game); font-size: 1.08rem; line-height: 1.75;
+}
+.msg .who {
+  position: absolute; top: -.95rem; left: 1rem;
+  font-family: var(--game); font-size: .86rem; line-height: 1; color: var(--bone);
+  background: #12070b; border: 2px solid var(--lace); border-radius: 4px; padding: .3rem .55rem;
+}
+.msg.right { align-self: flex-end; }
+.msg.right .who { left: auto; right: 1rem; }
+.msg.left { align-self: flex-start; }
+.chat .msg { max-width: min(40rem, 82%); }
+.msg.dark { border: 0; box-shadow: none; background: rgba(6, 2, 4, .84); border-radius: 4px; max-width: 46rem; }
+.msg.mid { align-self: center; text-align: center; background: none; border: 0; box-shadow: none; font-size: 1.25rem; color: var(--lace); padding: .4rem 1rem; min-width: 0; }
+.msg .red { color: var(--hi); }
+.msg .code { color: var(--lace); }
+.msg .nl { color: var(--lace); opacity: .7; font-size: .8em; }
+.msg .ph { color: var(--lace); font-style: italic; font-family: var(--body); }
+.dir { align-self: center; font-family: var(--body); font-style: italic; color: var(--bone-2); font-size: 1rem; }
+.choice { align-self: center; min-width: min(100%, 22rem); }
+.choice span { display: flex; gap: .6rem; align-items: center; }
+.choice span::before { content: ""; width: .5rem; height: .5rem; flex: none; background: var(--lace); clip-path: polygon(0 0, 100% 50%, 0 100%); }
+.dialog.play > * { animation: pop .5s cubic-bezier(.16, 1, .3, 1) backwards; animation-delay: calc(var(--n) * 110ms); }
+@keyframes pop { from { opacity: 0; transform: translateY(10px); } }
+@media (prefers-reduced-motion: reduce) { .dialog.play > * { animation: none; } }
+
+@media (max-width: 900px) {
+  .hero { grid-template-columns: minmax(0, 1fr); min-height: 0; padding-bottom: 8rem; }
+  .table { min-width: 0; width: 100%; }
+  .sheet-head { position: relative; padding-right: 4.2rem; }
+  #close { position: absolute; top: 1rem; right: 1rem; }
+  .codes span:last-child { font-size: .92rem; }
+  .tools { flex-wrap: nowrap; width: 100%; gap: .4rem; }
+  .tools .codes { flex: 1; min-width: 0; padding-left: 0; text-align: left; line-height: 1.25; }
+  .tools .icon-btn { width: 2.4rem; height: 2.4rem; }
+  .fan { height: auto; display: flex; gap: 1rem; overflow-x: auto; scroll-snap-type: x mandatory; padding: 1rem .5rem 1.5rem; width: 100%; }
+  .card { position: relative; left: auto; top: auto; margin: 0; transform: none; flex: none; --w: 9.5rem; scroll-snap-align: center; animation: none; }
+  .card:hover, .card:focus-visible { transform: translateY(-6px); }
+  .split { grid-template-columns: 1fr; }
+  .rows li { grid-template-columns: 1fr; gap: .2rem; }
+  .sheet-body { grid-template-columns: 1fr; overflow: auto; }
+  .notes { border-right: 0; border-top: 1px solid rgba(232, 103, 159, .22); order: 2; overflow: visible; }
+  .dialog { overflow: visible; }
+  .chat .msg { max-width: 92%; }
+  .bar { gap: 1rem; }
+}
+</style>
+</head>
+<body>
+<div class="ground">
+  <div class="tiles" aria-hidden="true"><span class="l1"></span><span class="l2"></span><span class="l3"></span></div>
+  <header class="bar">
+    <a href="#work" data-i18n="navWork">Other work</a>
+    <a href="#contact" data-i18n="navContact">Contact</a>
+    <button class="sound" id="sound" type="button" aria-pressed="false" data-i18n-label="musicOn" aria-label="Play music"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18V6l10-2v12"/><circle cx="6.5" cy="18" r="2.5"/><circle cx="16.5" cy="16" r="2.5"/></svg><span class="bars" aria-hidden="true"><i></i><i></i><i></i></span></button>
+    <div class="lang" role="group" aria-label="Language">
+      <button type="button" data-lang="en" aria-pressed="true">EN</button>
+      <button type="button" data-lang="tr" aria-pressed="false">TR</button>
+    </div>
+  </header>
+
+  <main class="hero" id="top">
+    <div>
+      <h1><span>Yusuf</span><span>Dökmeci</span></h1>
+      <p class="role" data-i18n="role">English to Turkish game localization</p>
+      <p class="lede" data-i18n="lede">I translate games, broadcast subtitles and long-form fiction into Turkish. The deck holds six scenes from a mature-rated dark fairy-tale RPG I localized. Pick a card to read the dialogue as it plays in the game.</p>
+      <div class="actions">
+        <button class="btn cv-btn" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v11m0 0-4.5-4.5M12 15l4.5-4.5M5 19h14"/></svg><span data-i18n="cv">Download CV</span></button>
+        <a class="btn quiet" href="#contact" data-i18n="hire">Get in touch</a>
+      </div>
+      <p class="status" aria-live="polite" data-status></p>
+    </div>
+    <div class="table">
+      <div class="fan" id="fan" role="list" aria-label="Scenes"></div>
+      <p class="pick" data-i18n="pick">Pick a card.</p>
+    </div>
+  </main>
+  <svg class="horizon" viewBox="0 0 1440 200" preserveAspectRatio="xMidYMax slice" aria-hidden="true">
+<g fill="#0a0406">
+<path d="M0 200V158c80-10 160 6 260-2s200-14 320-4 220 10 340 0 240-12 340-2 120 6 180 2v48Z"/>
+<path d="M92 160c4-30 6-56 4-78h14c-2 22 0 48 4 78Z"/><path d="M40 92c10-40 110-44 130 0-30 8-100 8-130 0Z"/>
+<path d="M210 162c2-18 3-32 2-44h9c-1 12 0 26 2 44Z"/><path d="M180 122c8-26 62-28 74 0-20 6-56 6-74 0Z"/>
+<path d="M300 164c-6-30 2-60-8-90M330 164c2-26-4-50 6-72M360 162c-4-22 4-40-4-58" stroke="#0a0406" stroke-width="5" fill="none"/>
+<circle cx="292" cy="70" r="16"/><circle cx="337" cy="88" r="13"/><circle cx="356" cy="100" r="11"/>
+<path d="M1100 168l8-28h44l6 28Z"/><path d="M1152 150c14-2 14 14 0 12" stroke="#0a0406" stroke-width="6" fill="none"/><ellipse cx="1130" cy="170" rx="38" ry="6"/>
+<ellipse cx="1290" cy="140" rx="26" ry="32"/><circle cx="1290" cy="96" r="18"/>
+<path d="M1282 84c-8-30-6-60 2-70 6 10 6 40 2 70Z"/><path d="M1296 84c2-30 10-58 20-66 2 12-6 42-14 68Z"/>
+<path d="M1272 170c0-14 4-24 10-28h8c4 6 6 16 6 28ZM1300 170c0-12 2-22 8-28h6c2 8 2 18 0 28Z"/>
+</g>
+<circle cx="1322" cy="132" r="9" fill="none" stroke="#b0386f" stroke-width="2.5" opacity=".75"/>
+<path d="M1322 126v6l4 3" stroke="#b0386f" stroke-width="2" fill="none" opacity=".75"/>
+<circle cx="292" cy="70" r="5" fill="#5e0c1a"/><circle cx="337" cy="88" r="4" fill="#5e0c1a"/><circle cx="356" cy="100" r="3.5" fill="#5e0c1a"/>
+<g fill="#3a0c16"><rect x="560" y="162" width="22" height="30" rx="2" transform="rotate(-18 571 177)"/><rect x="760" y="166" width="22" height="30" rx="2" transform="rotate(24 771 181)"/><rect x="900" y="158" width="22" height="30" rx="2" transform="rotate(-6 911 173)"/></g>
+</svg>
+</div>
+
+<section class="section" id="work" aria-labelledby="work-h">
+  <div class="wrap split">
+    <div>
+      <h2 id="work-h" data-i18n="workH">Other work</h2>
+      <p class="intro" data-i18n="workIntro">Subtitles for national television, a full web novel, and years of community translation.</p>
+    </div>
+    <div>
+      <ul class="rows">
+        <li><span class="when" data-i18n="w1t">2024 to now</span><div><h3 data-i18n="w1h">Indie game localization</h3><p data-i18n="w1p">Three indie games, about 80,000 words, localized with their developers and delivered as final in-build text: extraction, character limits, cultural adaptation of dialogue and UI.</p></div></li>
+        <li><span class="when" data-i18n="w2t">2023</span><div><h3 data-i18n="w2h">Subtitle writer, TRT 1</h3><p data-i18n="w2p">Wrote and proofread closed captions for national broadcast, following accessibility standards for deaf and hard-of-hearing viewers.</p></div></li>
+        <li><span class="when" data-i18n="w3t">Six months</span><div><h3 data-i18n="w3h">Web novel translation</h3><p data-i18n="w3p">A full-length web novel of about 26,000 words, translated alone with one voice and one glossary from the first chapter to the last.</p></div></li>
+        <li><span class="when" data-i18n="w4t">500+ releases</span><div><h3 data-i18n="w4h">Anime and manga</h3><p data-i18n="w4p">Episodes and chapters translated from English for community releases, keeping tone, idiom and honorifics.</p></div></li>
+        <li><span class="when" data-i18n="w5t">Since 2025</span><div><h3 data-i18n="w5h">Bilkent Translation Society</h3><p data-i18n="w5p">Board member. I run translation workshops, coordinate volunteer translators and review submissions for terminology and quality.</p></div></li>
+        <li><span class="when" data-i18n="w6t">Bilkent University</span><div><h3 data-i18n="w6h">Education and languages</h3><p data-i18n="w6p">B.Sc. student in Mechanical Engineering. Turkish native, English C1.</p></div></li>
+      </ul>
+      <div class="kit">
+        <p><strong data-i18n="k1">Localization:</strong> Translator++, RPG Maker</p>
+        <p><strong data-i18n="k2">Subtitling:</strong> Aegisub, Subtitle Edit, SRT, ASS</p>
+        <p><strong data-i18n="k3">Quality:</strong> <span data-i18n="k3v">proofreading, terminology management, style guide compliance, SDH standards</span></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section contact" id="contact" aria-labelledby="ct-h">
+  <div class="wrap split">
+    <div>
+      <h2 id="ct-h" data-i18n="ctH">Contact</h2>
+    </div>
+    <div>
+      <p class="note" data-i18n="ctNote">Open to freelance and in-house work in game localization, LQA and subtitling.</p>
+      <a class="mail" href="mailto:yusuf.dokmeci@bilkent.edu.tr">yusuf.dokmeci@bilkent.edu.tr</a>
+      <div class="actions">
+        <button class="btn cv-btn" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v11m0 0-4.5-4.5M12 15l4.5-4.5M5 19h14"/></svg><span data-i18n="cvPdf">Download CV (PDF)</span></button>
+        <a class="btn quiet" href="https://www.linkedin.com/in/yusufdokmeci/" target="_blank" rel="noopener">LinkedIn</a>
+      </div>
+      <p class="status" aria-live="polite" data-status></p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p data-i18n="foot">Dialogue excerpts come from a game I localized into Turkish. Its characters and story belong to their creators. All illustrations on this page are original.</p>
+</footer>
+
+<div class="stage" id="stage" hidden>
+  <div class="scrim" data-close></div>
+  <div class="flip" id="flip">
+    <div class="face" id="flipFront" aria-hidden="true"></div>
+    <section class="sheet" role="dialog" aria-modal="true" aria-labelledby="sheetTitle">
+      <div class="sheet-in">
+        <header class="sheet-head">
+          <div class="mini" id="sheetMini" aria-hidden="true"></div>
+          <div class="head-text">
+            <h2 id="sheetTitle"></h2>
+            <p id="sheetSub"></p>
+          </div>
+          <div class="tools">
+            <button class="codes" id="codes" type="button" aria-pressed="false"><span class="track" aria-hidden="true"></span><span data-i18n="codes">Show engine codes</span></button>
+            <button class="icon-btn" id="prev" type="button" data-i18n-label="prev" aria-label="Previous card"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5 8 12l7 7"/></svg></button>
+            <button class="icon-btn" id="next" type="button" data-i18n-label="next" aria-label="Next card"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg></button>
+            <button class="icon-btn" id="close" type="button" data-i18n-label="close" aria-label="Close"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
+          </div>
+        </header>
+        <div class="sheet-body">
+          <aside class="notes"><h3 data-i18n="notesH">Translator's notes</h3><ul id="notes"></ul></aside>
+          <div class="dialog" id="dialog" tabindex="0" data-i18n-label="dialogLabel" aria-label="Dialogue"></div>
+        </div>
+      </div>
+    </section>
+  </div>
+</div>
+
+<script>
+const CARDS = [{"id": "tea", "rank": "3", "suit": "club", "art": "tea", "layout": "story", "title": {"en": "Three for tea", "tr": "Üç Kişilik Çay Partisi"}, "sub": {"en": "Narrator", "tr": "Anlatıcı"}, "notes": [{"en": "A storybook narrator: hearsay past tense (<em>anlaşamazmış</em>, <em>aşık oluvermiş</em>) keeps fairy-tale distance, then the ending drops into the plain past (<em>anladı</em>, <em>iş işten geçti</em>) when it turns real.", "tr": "Masal anlatıcısı: duyulan geçmiş zaman (<em>anlaşamazmış</em>, <em>aşık oluvermiş</em>) masal mesafesini koruyor, son kısım gerçeğe döndüğünde görülen geçmişe (<em>anladı</em>, <em>iş işten geçti</em>) iniyor."}, {"en": "Epithets keep the fairy-tale texture in Turkish: <em>Meraklı melahat Alice</em>, <em>Sivri dilli Siyah Tavşan</em>, <em>Kanıbozuk Ejdercenk</em>.", "tr": "Sıfatlar masal dokusunu Türkçede koruyor: <em>Meraklı melahat Alice</em>, <em>Sivri dilli Siyah Tavşan</em>, <em>Kanıbozuk Ejdercenk</em>."}], "lines": [{"mid": "[Üç Kişilik Çay Partisi]"}, {"nar": "Mahvolmuş gerçeklik hummalı bir kâbus gibiydi.\\!\nHarikalar Diyarı'nın sükûnetinde her gününü\nhuzur içinde geçiriyordu."}, {"nar": "Taptaze çayları yudumlayıp özene bezene yazılmış\nşiir ve şakalarla eğlenmek harikaydı. Yalnız, her\nşeyden çok bitmek bilmez peri masallarını\nokumaktan keyif alırdı."}, {"nar": "Zaman kaşla göz arasında geçti gitti ve havanın\nkararmasıyla üç kişilik çay partileri her zamanki gibi\nbaşladı."}, {"dir": {"en": "The music changes.", "tr": "Müzik değişiyor."}}, {"nar": "Çay partisiz tek bir günleri geçmezdi, her daim.\\!\nMeraklı melahat Alice.\\!\nSivri dilli Siyah Tavşan.\\!\nVe aralarına yeni katılan xxx."}, {"nar": "Bizimkiyle tavşan hiçbir konuda anlaşamazmış, çoğu\nzaman tartışmaları kavgaya dönermiş ama zaman\ngeçtikçe, o tartışmaları derinden bir anlayışın ve\narkadaşlığın kapısını aralamış."}, {"nar": "Harikalar Diyarı baş belalarından da yoksun değilmiş,\nmisal Kanıbozuk Ejdercenk gibi veya despot Kırmızı\nKraliçe.\\! Ama el birliğiyle o üçlü her fırtınaya\ngöğüs germiş."}, {"nar": "Harika bir rüyaymış, ebediyen sürecekmişcesine.\\!\nAma çok geçmeden bizimkiyle kızcağız birbirlerine\naşık oluvermiş."}, {"nar": "\"Çok, çok uzaklarda kaybolsam bile yine de beni\nbulmaya gelir miydin?\" diye utana sıkıla sormuş\nküçük kız."}, {"nar": "\"Tabii ki bulmaya gelirdim, sözüm söz.\"\nAy ışığının aydınlattığı kütüphanede ikimiz söz\nverir gibi öpüşmüştük.\\! Bizim haberimiz yokken de\nSiyah Tavşan tüm bunları rafların ardından görmüş."}, {"nar": "\"Bu adam Alice'imizi kendine saklama niyetinde.\nEy Tanrım, tek bir dileğim var.\"\\!\nDiye dua etti ama en nihayetinde o çay partisinin bir\ndaha asla yaşanmayacağını anladı ama iş işten geçti."}, {"mid": "VE SON"}]}, {"id": "queen", "rank": "Q", "suit": "heart", "art": "rose", "layout": "chat", "title": {"en": "Contempt, then honey", "tr": "Önce küçümseme, sonra bal"}, "sub": {"en": "Mary Sue and Kırmızı Başlıklı", "tr": "Mary Sue ile Kırmızı Başlıklı"}, "notes": [{"en": "Mary Sue swings from scorn (<em>kendini bir halt sanma</em>) to baby talk (<em>tabii canım!♪</em>), and the next line echoes it in <em>can atıyor, can!!</em>, so the sweetness reads as mockery.", "tr": "Mary Sue küçümsemeden (<em>kendini bir halt sanma</em>) şımarık bir tatlılığa (<em>tabii canım!♪</em>) geçiyor; sonraki satırdaki <em>can atıyor, can!!</em> bu kelimeyi geri çağırıp tatlılığı alaya çeviriyor."}, {"en": "Red Riding Hood keeps the name Turkish players grew up with, <em>Kırmızı Başlıklı</em>. The ♡ and ♪ marks stay as part of Mary Sue's voice.", "tr": "Kırmızı Başlıklı, Türk oyuncunun masaldan tanıdığı adıyla kalıyor. ♡ ve ♪ işaretleri Mary Sue'nun sesinin bir parçası olarak korunuyor."}], "lines": [{"sp": "Mary Sue", "side": "l", "t": "Niye hâlâ iki ayak üzerinde duruyorsun? İntikam\niçin mi? Takıntından mı? Ya da belki... aşkından mı?!\nAhh, ne gelip geçici duygular...\nHİÇBİRİNİN ZERRE DEĞERİ YOK!"}, {"sp": "Kırmızı Başlıklı", "side": "r", "t": "Acınacak hâldesin, Mary Sue.\nGüveler gibi ölümüne doğru gidiyorsun."}, {"sp": "Mary Sue", "side": "l", "t": "Tee-hee... kendini bir halt sanma.\nBaşından beri gözümde bir hiçtin."}, {"sp": "Mary Sue", "side": "l", "t": "Aklıma gelmişken! Grimm, aşkım!♡\\!\nYüzüğüme gözün gibi baktın mı bakayım?\nSayende hapisten kurtulabildim!♪"}, {"sp": "Kırmızı Başlıklı", "side": "r", "t": "Grimm?..\nBu şeyi sen mi kurtardın?.."}, {"sp": "Mary Sue", "side": "l", "t": "Ehehe, tabii canım!♪\nBenimle masala tekrar baştan başlamak\niçin can atıyor, can!!\nBeni kurtarmayacak da ne yapacak?"}, {"dir": {"en": "Grimm stays silent.", "tr": "Grimm sessiz kalıyor."}}, {"choice": ["Mary Sue'nun yanında dur", "Kırmızı Başlıklı'nın yanında dur"]}]}, {"id": "curse", "rank": "A", "suit": "spade", "art": "watch", "layout": "window", "title": {"en": "The curse", "tr": "Lanet"}, "sub": {"en": "Mary Sue", "tr": "Mary Sue"}, "notes": [{"en": "The laughter is spelled with Turkish letters and stretched vowels (<em>KYAHİHİHİ</em>, <em>SİZİİİİİ</em>), so the mania reads in Turkish type instead of a borrowed <em>HAHAHA</em>.", "tr": "Kahkaha Türkçe harflerle ve uzatılmış ünlülerle yazıldı (<em>KYAHİHİHİ</em>, <em>SİZİİİİİ</em>); delilik ödünç bir <em>HAHAHA</em> yerine Türkçe dizilişle okunuyor."}, {"en": "The red highlight codes <code>\\c[2]</code> and <code>\\c[0]</code> still wrap the whole threat. With the Turkish verb last, the span closes on <em>göremeyecek</em>.", "tr": "Kırmızı vurgu kodları <code>\\c[2]</code> ve <code>\\c[0]</code> tehdidin tamamını sarıyor. Türkçede fiil sonda olduğu için vurgu <em>göremeyecek</em> ile kapanıyor."}], "lines": [{"sp": "Mary Sue", "t": "KYAHİHİHİHİHİHİHAHAAHAHAAHAAHHAHAHAH!!\nYOK ÖYLE İŞ, GERİ ZEKALILAR SİZİİİİİ!!!"}, {"sp": "Mary Sue", "t": "Yani! Haberin olsun! Peşinen söyleyeyim!\\!\nÖyle bir ayarladım ki \\c[2]Kırmızı Başlıklı\n20 yaşından ilerisini göremeyecek\\c[0] diye!!"}, {"sp": "Mary Sue", "t": "Anlayacağınız, buradan canlı çıksanız bile\n\\c[2]bir seneye kalmadan ölecek\\c[0],\nbunu o kafanıza sokun!!"}, {"sp": "Kırmızı Başlıklı", "t": "!.."}, {"sp": "Mary Sue", "t": "Bir şey daha söyleyeyim mi Grimm? Senin de\ngün yüzü göreceğin yok!\\! Yanına yaklaştığın her\nkadın sinek gibi düşüp ölecek! Senin yapında var bu!\nTrajik kahraman!!!"}, {"sp": "Mary Sue", "t": "İçler acısı! Yürek burkuyor!\nNiye bu dünyada gözlerini açtı ki?!!!"}, {"sp": "Mary Sue", "t": "Kyaha! KYAHAHA!\nKYAHHİHAHAHAHAİİHHİAHİAİHİHAHHİAHİAHİİİHİHİ…"}]}, {"id": "confession", "rank": "2", "suit": "heart", "art": "hood", "layout": "window", "title": {"en": "Confession", "tr": "İtiraf"}, "sub": {"en": "Kırmızı Başlıklı", "tr": "Kırmızı Başlıklı"}, "notes": [{"en": "A quiet register after the noise: short sentences and ellipses carry the hesitation (<em>Söylemekten korktum. ...özür dilerim.</em>).", "tr": "Gürültünün ardından sessiz bir ton: kısa cümleler ve üç noktalar tereddüdü taşıyor (<em>Söylemekten korktum. ...özür dilerim.</em>)."}, {"en": "<em>İyiymiş kötüymüş bakmadan</em> uses the Turkish <em>-mış</em> form to say \"never asking whether they were good or bad\" the way people actually speak.", "tr": "<em>İyiymiş kötüymüş bakmadan</em>, <em>-mış</em> ekiyle \"iyi mi kötü mü diye sormadan\" anlamını gündelik konuşmadaki haliyle veriyor."}], "lines": [{"sp": "Kırmızı Başlıklı", "t": "Kendim hakkında araştırmalar yaparken zaten\nbuna denk gelmiştim. Gerek kendi yaşam sürem\ngerekse senin yatkınlıkların hakkında."}, {"sp": "Kırmızı Başlıklı", "t": "Söylemekten korktum.\n...özür dilerim."}, {"dir": {"en": "Grimm stays silent.", "tr": "Grimm sessiz kalıyor."}}, {"sp": "Kırmızı Başlıklı", "t": "...Ruhlarımızı tekrar tekrar kirletip durduk.\\!\nİyiymiş kötüymüş bakmadan şu vakte kadar\nkaç kişiyi öldürdük, sen biliyor musun?\n...Ben saymayı bırakalı çok oldu."}, {"sp": "Kırmızı Başlıklı", "t": "Hiç şüphesiz o sayısız kin ve nefret\nsırtımıza binmiştir bile."}, {"dir": {"en": "A pause.", "tr": "Kısa bir sessizlik."}}, {"sp": "Kırmızı Başlıklı", "t": "Yine de."}, {"dir": {"en": "The music changes.", "tr": "Müzik değişiyor."}}, {"sp": "Kırmızı Başlıklı", "t": "Ellerin hâlâ sıcacıkk..."}, {"sp": "Kırmızı Başlıklı", "t": "Beni yaratan ne manyak Tanrı'nın tekiydi\nne de annemdi..."}, {"sp": "Kırmızı Başlıklı", "t": "Sendin...\nBir tek sendin, Grimm."}]}, {"id": "prickett", "rank": "J", "suit": "diamond", "art": "keyhole", "layout": "window", "title": {"en": "The maze of secrets", "tr": "Sırlar Labirenti"}, "sub": {"en": "Prickett", "tr": "Prickett"}, "notes": [{"en": "Stage vocabulary (<em>başroller</em>, <em>seyirci</em>, <em>figüran</em>) carries his self-pity as a side character who knows he is one.", "tr": "Sahne sözcükleri (<em>başroller</em>, <em>seyirci</em>, <em>figüran</em>), yan karakter olduğunu bilen birinin kendine acımasını taşıyor."}, {"en": "The ☆ marks stay as part of his playful voice, and <code>\\n[1]</code>, the player-name code, is left for the engine to fill.", "tr": "☆ işaretleri şakacı sesinin parçası olarak kalıyor; oyuncu adı kodu <code>\\n[1]</code> motorun doldurması için korunuyor."}], "lines": [{"dir": {"en": "Prickett falls silent for a moment.", "tr": "Prickett bir an susuyor."}}, {"sp": "Prickett", "t": "Daha ne kadar bu sevda kovalamacası sürecek?\\!\nEbediyen bahanelere sarılıp durmak içler acısı,\naşkını yaşayamadan. Bir tek başroller öne çıkıyor,\nseyirci ve diğer oyuncuların vay hâline."}, {"sp": "Prickett", "t": "Ama, bak, asıl içler acısı hâlde kim biliyor musun?\nOnlara imrenen, ben. Alelade figüranın teki\nvadesi dolmuş bir aşka dört elle sarılmış..."}, {"sp": "Prickett", "t": "Alice'le ikiniz nihayet bir araya gelince\nbana ne olacak? Cevap dünden belli.\nEbedi yalnızlık beni bekliyor. Böyle kaybedeceğime\nkötü adam olup ortalığı birbirine katarım daha iyi."}, {"sp": "Prickett", "t": "......Şaka şaka.☆"}, {"sp": "Prickett", "t": "Sırlar Labirenti'nde zaman zaman gizemli\noluşumlar meydana gelir☆ Enfield Olayı'nda da\nkesin şeytanın bir parmağı vardır, kesin!☆"}, {"sp": "Prickett", "t": "Çıkışta seni bekliyor olacağım.\n\\n[1]."}]}, {"id": "cheshire", "rank": "", "suit": "joker", "art": "grin", "layout": "window", "title": {"en": "How children played butcher", "tr": "Nasıl Çocuklar Kasapçılık Oynar"}, "sub": {"en": "Cheshire Cat", "tr": "Cheshire Kedisi"}, "notes": [{"en": "Told like a grim folk tale: the simple present (<em>görür</em>, <em>iner</em>, <em>asar</em>) keeps the horror flat and matter-of-fact.", "tr": "Karanlık bir halk masalı gibi anlatılıyor: geniş zaman (<em>görür</em>, <em>iner</em>, <em>asar</em>) dehşeti düz ve soğukkanlı tutuyor."}, {"en": "The cat's closing line slips into casual speech (<em>geldiyav</em>), pulling the listener back out of the story.", "tr": "Kedinin son repliği gündelik konuşmaya kayıyor (<em>geldiyav</em>) ve dinleyeni hikâyeden geri çekiyor."}], "lines": [{"sp": "Cheshire Kedisi", "t": "Nasıl Çocuklar Kasapçılık Oynar."}, {"sp": "Cheshire Kedisi", "t": "Günlerden bir gün, iki erkek kardeş babalarını\nbir domuzu öldürürken görür. Babalarından\ngördüklerini taklit etmeye çalışıp ağabey \"kasap\"\nkardeş ise \"domuz\" rolüne bürünür."}, {"sp": "Cheshire Kedisi", "t": "Anneleriyse evin üst katında yeni doğan bebeklerine\nbanyo yaptırırken ortanca çocuğun çığlıklarıyla\napar topar alt kata iner."}, {"sp": "Cheshire Kedisi", "t": "En büyük oğlunun yaptıklarına şahit olan anne\nbir anlık sinirle ortanca oğlunun boğazındaki bıçağı\nsöküp abisinin kalbine saplayıverir."}, {"sp": "Cheshire Kedisi", "t": "Anne daha sonra öfkesine yenik düşmüşken\nbebeğini banyoda öylece boğulmaya bıraktığını\nfark edip yaşadığı acılara dayanamayarak\nkendini asar."}, {"sp": "Cheshire Kedisi", "t": "Irgat baba ise uzun bir günün ardından eve gelir.\nTüm aile fertlerinin öldüğü manzarasıyla karşı\nkarşıya kalan baba çok geçmeden kederinden ölür.\n....günün sonunda kimse hayatta kalamamıştır."}, {"sp": "Cheshire Kedisi", "t": "...Kimin aklına bu kadar canice bir hikaye geldiyav?\nŞeytanın ta kendisi yazsa bu kadar olur,\nsen ne dersin?.."}]}];
+const ART = {"tea": "<svg class=\"art\" viewBox=\"0 0 120 140\" preserveAspectRatio=\"xMidYMid slice\" aria-hidden=\"true\"><defs><pattern id=\"cktea\" width=\"20\" height=\"20\" patternUnits=\"userSpaceOnUse\" patternTransform=\"rotate(45)\"><rect width=\"20\" height=\"20\" fill=\"#1a0a10\"/><rect width=\"10\" height=\"10\" fill=\"#4a0d19\"/><rect x=\"10\" y=\"10\" width=\"10\" height=\"10\" fill=\"#4a0d19\"/></pattern></defs><rect width=\"120\" height=\"140\" fill=\"url(#cktea)\"/>\n<path d=\"M30 52c-16-2-18 24 2 24\" fill=\"none\" stroke=\"#0d0608\" stroke-width=\"9\" stroke-linecap=\"round\"/>\n<path d=\"M30 52c-16-2-18 24 2 24\" fill=\"none\" stroke=\"#f2ebe7\" stroke-width=\"3.5\" stroke-linecap=\"round\"/>\n<path d=\"M84 60c8-2 14-10 20-22 3 2 4 4 3 6-6 14-12 22-22 26Z\" fill=\"#f2ebe7\" stroke=\"#0d0608\" stroke-linejoin=\"round\" stroke-linecap=\"round\" stroke-width=\"3\"/>\n<ellipse cx=\"58\" cy=\"64\" rx=\"30\" ry=\"23\" fill=\"#f2ebe7\" stroke=\"#0d0608\" stroke-linejoin=\"round\" stroke-linecap=\"round\" stroke-width=\"3\"/>\n<path d=\"M40 44c4-10 32-10 36 0Z\" fill=\"#a3172f\" stroke=\"#0d0608\" stroke-linejoin=\"round\" stroke-linecap=\"round\" stroke-width=\"2.6\"/>\n<circle cx=\"58\" cy=\"35\" r=\"4\" fill=\"#a3172f\" stroke=\"#0d0608\" stroke-linejoin=\"round\" stroke-linecap=\"round\" stroke-width=\"2.4\"/>\n<g transform=\"translate(49 56) scale(.9)\"><path d=\"M10 1.5a4 4 0 0 1 3.2 6.4 4 4 0 1 1-1.6 6.9c.3 1.8 1 3 2.4 4.2H6c1.4-1.2 2.1-2.4 2.4-4.2a4 4 0 1 1-1.6-6.9A4 4 0 0 1 10 1.5Z\" fill=\"#0d0608\"/></g>\n<g stroke=\"#0d0608\" stroke-linejoin=\"round\" stroke-linecap=\"round\" stroke-width=\"2.4\">\n<ellipse cx=\"22\" cy=\"124\" rx=\"17\" ry=\"4.5\" fill=\"#0d0608\"/><path d=\"M10 104h24l-3 14c-1 4-17 4-18 0Z\" fill=\"#f2ebe7\"/><ellipse cx=\"22\" cy=\"104\" rx=\"12\" ry=\"3\" fill=\"#a3172f\"/>\n<ellipse cx=\"60\" cy=\"124\" rx=\"17\" ry=\"4.5\" fill=\"#0d0608\"/><path d=\"M48 104h24l-3 14c-1 4-17 4-18 0Z\" fill=\"#f2ebe7\"/><ellipse cx=\"60\" cy=\"104\" rx=\"12\" ry=\"3\" fill=\"#a3172f\"/>\n<ellipse cx=\"98\" cy=\"124\" rx=\"17\" ry=\"4.5\" fill=\"#0d0608\"/><path d=\"M86 104h24l-3 14c-1 4-17 4-18 0Z\" fill=\"#f2ebe7\"/><ellipse cx=\"98\" cy=\"104\" rx=\"12\" ry=\"3\" fill=\"#a3172f\"/>\n</g>\n</svg>", "queen": "<svg class=\"art\" viewBox=\"0 0 120 140\" preserveAspectRatio=\"xMidYMid slice\" aria-hidden=\"true\"><defs><pattern id=\"ckqueen\" width=\"20\" height=\"20\" patternUnits=\"userSpaceOnUse\" patternTransform=\"rotate(45)\"><rect width=\"20\" height=\"20\" fill=\"#1a0a10\"/><rect width=\"10\" height=\"10\" fill=\"#4a0d19\"/><rect x=\"10\" y=\"10\" width=\"10\" height=\"10\" fill=\"#4a0d19\"/></pattern></defs><rect width=\"120\" height=\"140\" fill=\"url(#ckqueen)\"/>\n<path d=\"M60 84C58 104 63 118 58 140\" fill=\"none\" stroke=\"#0d0608\" stroke-linejoin=\"round\" stroke-linecap=\"round\" stroke-width=\"5\"/>\n<path d=\"M59 108c-14-10-28-6-34 2 10 6 24 8 34-2Z\" fill=\"#2a1418\" stroke=\"#0d0608\" stroke-linejoin=\"round\" stroke-linecap=\"round\" stroke-width=\"2.5\"/>\n<path d=\"M60 120c12-12 26-10 32-3-9 7-22 10-32 3Z\" fill=\"#2a1418\" stroke=\"#0d0608\" stroke-linejoin=\"round\" stroke-linecap=\"round\" stroke-width=\"2.5\"/>\n<clipPath id=\"rhqueen\"><rect x=\"60\" y=\"20\" width=\"40\" height=\"80\"/></clipPath>\n<circle cx=\"60\" cy=\"58\" r=\"27\" fill=\"#f2ebe7\" stroke=\"#0d0608\" stroke-linejoin=\"round\" stroke-linecap=\"round\" stroke-width=\"3\"/>\n<circle cx=\"60\" cy=\"58\" r=\"27\" fill=\"#a3172f\" clip-path=\"url(#rhqueen)\"/>\n<path d=\"M75 82v11a3 3 0 0 0 6 0V78\" fill=\"#a3172f\" stroke=\"#0d0608\" stroke-linejoin=\"round\" stroke-linecap=\"round\" stroke-width=\"2.2\"/>\n<path d=\"M65 85v6a2.5 2.5 0 0 0 5 0v-7\" fill=\"#a3172f\" stroke=\"#0d0608\" stroke-linejoin=\"round\" stroke-linecap=\"round\" stroke-width=\"2.2\"/>\n<circle cx=\"60\" cy=\"58\" r=\"27\" fill=\"none\" stroke=\"#0d0608\" stroke-linejoin=\"round\" stroke-linecap=\"round\" stroke-width=\"3\"/>\n<path d=\"M60 58c6-2 8 6 2 9-9 4-15-6-9-13 8-9 24-2 22 12-2 14-22 20-32 8-9-11-2-29 14-30\" fill=\"none\" stroke=\"#0d0608\" stroke-linejoin=\"round\" stroke-linecap=\"round\" stroke-width=\"2.6\"/>\n<g transform=\"rotate(38 96 30)\"><rect x=\"92\" y=\"-6\" width=\"8\" height=\"34\" rx=\"3\" fill=\"#0d0608\"/><rect x=\"91\" y=\"27\" width=\"10\" height=\"7\" fill=\"#d8c9c4\" stroke=\"#0d0608\" stroke-linejoin=\"round\" stroke-linecap=\"round\" stroke-width=\"2\"/><path d=\"M91 34h10l-2 11c-1 4-5 4-6 0Z\" fill=\"#a3172f\" stroke=\"#0d0608\" stroke-linejoin=\"round\" stroke-linecap=\"round\" stroke-width=\"2\"/></g>\n</svg>", "curse": "<svg class=\"art\" viewBox=\"0 0 120 140\" preserveAspectRatio=\"xMidYMid slice\" aria-hidden=\"true\"><defs><pattern id=\"ckcurse\" width=\"20\" height=\"20\" patternUnits=\"userSpaceOnUse\" patternTransform=\"rotate(45)\"><rect width=\"20\" height=\"20\" fill=\"#1a0a10\"/><rect width=\"10\" height=\"10\" fill=\"#4a0d19\"/><rect x=\"10\" y=\"10\" width=\"10\" height=\"10\" fill=\"#4a0d19\"/></pattern></defs><rect width=\"120\" height=\"140\" fill=\"url(#ckcurse)\"/>\n<path d=\"M60 10c12 18 44 32 44 58 0 15-11 24-24 24-8 0-14-4-18-9 1 10 5 17 13 23H45c8-6 12-13 13-23-4 5-10 9-18 9-13 0-24-9-24-24 0-26 32-40 44-58Z\" fill=\"#f2ebe7\" stroke=\"#0d0608\" stroke-linejoin=\"round\" stroke-linecap=\"round\" stroke-width=\"3\"/>\n<path d=\"M60 48c-4-8-2-16 6-22\" fill=\"none\" stroke=\"#d8c9c4\" stroke-width=\"3\" stroke-dasharray=\"3 3\" stroke-linecap=\"round\"/>\n<rect x=\"55\" y=\"40\" width=\"10\" height=\"7\" rx=\"2\" fill=\"#a3172f\" stroke=\"#0d0608\" stroke-linejoin=\"round\" stroke-linecap=\"round\" stroke-width=\"2.4\"/>\n<circle cx=\"60\" cy=\"68\" r=\"21\" fill=\"#a3172f\" stroke=\"#0d0608\" stroke-linejoin=\"round\" stroke-linecap=\"round\" stroke-width=\"3\"/>\n<circle cx=\"60\" cy=\"68\" r=\"15.5\" fill=\"#f2ebe7\" stroke=\"#0d0608\" stroke-linejoin=\"round\" stroke-linecap=\"round\" stroke-width=\"2.4\"/>\n<g stroke=\"#0d0608\" stroke-linejoin=\"round\" stroke-linecap=\"round\" stroke-width=\"2\">\n<path d=\"M60 54.5v3.5M60 78v3.5M46.5 68H50M70 68h3.5\"/>\n<path d=\"M60 68 60 59M60 68l6 3\" stroke-width=\"2.6\"/>\n</g>\n<path d=\"M50 58l6 5-3 4 7 4-2 5 6 4\" fill=\"none\" stroke=\"#5e0c1a\" stroke-width=\"1.6\" stroke-linejoin=\"round\"/>\n</svg>", "confession": "<svg class=\"art\" viewBox=\"0 0 120 140\" preserveAspectRatio=\"xMidYMid slice\" aria-hidden=\"true\"><defs><pattern id=\"ckconfession\" width=\"20\" height=\"20\" patternUnits=\"userSpaceOnUse\" patternTransform=\"rotate(45)\"><rect width=\"20\" height=\"20\" fill=\"#1a0a10\"/><rect width=\"10\" height=\"10\" fill=\"#4a0d19\"/><rect x=\"10\" y=\"10\" width=\"10\" height=\"10\" fill=\"#4a0d19\"/></pattern></defs><rect width=\"120\" height=\"140\" fill=\"url(#ckconfession)\"/>\n<path d=\"M60 16C38 16 30 38 32 56 24 80 18 112 12 140h96c-6-28-12-60-20-84 2-18-6-40-28-40Z\" fill=\"#a3172f\" stroke=\"#0d0608\" stroke-linejoin=\"round\" stroke-linecap=\"round\" stroke-width=\"3\"/>\n<path d=\"M44 76c-4 18-8 40-12 64M76 76c4 18 8 40 12 64M60 92v48\" fill=\"none\" stroke=\"#5e0c1a\" stroke-width=\"3\" stroke-linecap=\"round\"/>\n<ellipse cx=\"60\" cy=\"56\" rx=\"17\" ry=\"21\" fill=\"#0d0608\"/>\n<g transform=\"translate(47 47) scale(.55)\"><path d=\"M10 18C4 13 1 10 1 6.2 1 3.5 3 1.6 5.6 1.6c2 0 3.5 1.2 4.4 2.8.9-1.6 2.4-2.8 4.4-2.8C17 1.6 19 3.5 19 6.2 19 10 16 13 10 18Z\" fill=\"#e8679f\"/></g>\n<g transform=\"translate(62 47) scale(.55)\"><path d=\"M10 18C4 13 1 10 1 6.2 1 3.5 3 1.6 5.6 1.6c2 0 3.5 1.2 4.4 2.8.9-1.6 2.4-2.8 4.4-2.8C17 1.6 19 3.5 19 6.2 19 10 16 13 10 18Z\" fill=\"#e8679f\"/></g>\n<path d=\"M48 80c4 6 20 6 24 0l-4 10H52Z\" fill=\"#f2ebe7\" stroke=\"#0d0608\" stroke-linejoin=\"round\" stroke-linecap=\"round\" stroke-width=\"2.4\"/>\n</svg>", "prickett": "<svg class=\"art\" viewBox=\"0 0 120 140\" preserveAspectRatio=\"xMidYMid slice\" aria-hidden=\"true\"><defs><pattern id=\"ckprickett\" width=\"20\" height=\"20\" patternUnits=\"userSpaceOnUse\" patternTransform=\"rotate(45)\"><rect width=\"20\" height=\"20\" fill=\"#1a0a10\"/><rect width=\"10\" height=\"10\" fill=\"#4a0d19\"/><rect x=\"10\" y=\"10\" width=\"10\" height=\"10\" fill=\"#4a0d19\"/></pattern></defs><rect width=\"120\" height=\"140\" fill=\"url(#ckprickett)\"/>\n<path d=\"M60 8 112 70 60 132 8 70Z\" fill=\"#f2ebe7\" stroke=\"#0d0608\" stroke-linejoin=\"round\" stroke-linecap=\"round\" stroke-width=\"3\"/>\n<clipPath id=\"khprickett\"><circle cx=\"60\" cy=\"56\" r=\"17\"/><path d=\"M51 66 44 106h32l-7-40Z\"/></clipPath>\n<g clip-path=\"url(#khprickett)\">\n<rect x=\"30\" y=\"30\" width=\"60\" height=\"90\" fill=\"#0d0608\"/>\n<path d=\"M40 44h12v8h-8v8h16v-16h8v24h-8v8H48v8h16v8H44v8h28v-8h-6M56 36v8M72 52h8v16M36 76h8M64 84h12v12\" fill=\"none\" stroke=\"#a3172f\" stroke-width=\"3\" stroke-linecap=\"square\"/>\n</g>\n<circle cx=\"60\" cy=\"56\" r=\"17\" fill=\"none\" stroke=\"#0d0608\" stroke-linejoin=\"round\" stroke-linecap=\"round\" stroke-width=\"3\"/>\n<path d=\"M51 69 44 106h32l-7-37\" fill=\"none\" stroke=\"#0d0608\" stroke-linejoin=\"round\" stroke-linecap=\"round\" stroke-width=\"3\"/>\n</svg>", "cheshire": "<svg class=\"art\" viewBox=\"0 0 120 140\" preserveAspectRatio=\"xMidYMid slice\" aria-hidden=\"true\"><defs><pattern id=\"ckcheshire\" width=\"20\" height=\"20\" patternUnits=\"userSpaceOnUse\" patternTransform=\"rotate(45)\"><rect width=\"20\" height=\"20\" fill=\"#1a0a10\"/><rect width=\"10\" height=\"10\" fill=\"#4a0d19\"/><rect x=\"10\" y=\"10\" width=\"10\" height=\"10\" fill=\"#4a0d19\"/></pattern></defs><rect width=\"120\" height=\"140\" fill=\"url(#ckcheshire)\"/>\n<path d=\"M14 30c30-16 70-16 96 4M8 120c30 14 74 12 104-6\" fill=\"none\" stroke=\"#b0386f\" stroke-width=\"9\" stroke-linecap=\"round\" opacity=\".55\"/>\n<path d=\"M30 46c6-8 18-8 22 2-6 6-16 6-22-2Z\" fill=\"#e8679f\" stroke=\"#0d0608\" stroke-linejoin=\"round\" stroke-linecap=\"round\" stroke-width=\"2.6\"/>\n<path d=\"M68 48c4-10 16-10 22-2-6 8-16 8-22 2Z\" fill=\"#e8679f\" stroke=\"#0d0608\" stroke-linejoin=\"round\" stroke-linecap=\"round\" stroke-width=\"2.6\"/>\n<path d=\"M41 42v10M79 42v10\" stroke=\"#0d0608\" stroke-width=\"3\" stroke-linecap=\"round\"/>\n<path d=\"M14 66c18 44 74 44 92 0-20 18-72 18-92 0Z\" fill=\"#f2ebe7\" stroke=\"#0d0608\" stroke-linejoin=\"round\" stroke-linecap=\"round\" stroke-width=\"3\"/>\n<g stroke=\"#0d0608\" stroke-width=\"2.2\" stroke-linecap=\"round\">\n<path d=\"M26 76l2 10M36 81l1 12M47 84v13M58 85v14M69 84v13M80 81l-1 12M91 76l-2 10\"/>\n</g>\n</svg>"};
+const ART_F = {"tea": "<svg class=\"art\" viewBox=\"0 0 120 140\" preserveAspectRatio=\"xMidYMid slice\" aria-hidden=\"true\"><defs><pattern id=\"ckftea\" width=\"20\" height=\"20\" patternUnits=\"userSpaceOnUse\" patternTransform=\"rotate(45)\"><rect width=\"20\" height=\"20\" fill=\"#1a0a10\"/><rect width=\"10\" height=\"10\" fill=\"#4a0d19\"/><rect x=\"10\" y=\"10\" width=\"10\" height=\"10\" fill=\"#4a0d19\"/></pattern></defs><rect width=\"120\" height=\"140\" fill=\"url(#ckftea)\"/>\n<path d=\"M30 52c-16-2-18 24 2 24\" fill=\"none\" stroke=\"#0d0608\" stroke-width=\"9\" stroke-linecap=\"round\"/>\n<path d=\"M30 52c-16-2-18 24 2 24\" fill=\"none\" stroke=\"#f2ebe7\" stroke-width=\"3.5\" stroke-linecap=\"round\"/>\n<path d=\"M84 60c8-2 14-10 20-22 3 2 4 4 3 6-6 14-12 22-22 26Z\" fill=\"#f2ebe7\" stroke=\"#0d0608\" stroke-linejoin=\"round\" stroke-linecap=\"round\" stroke-width=\"3\"/>\n<ellipse cx=\"58\" cy=\"64\" rx=\"30\" ry=\"23\" fill=\"#f2ebe7\" stroke=\"#0d0608\" stroke-linejoin=\"round\" stroke-linecap=\"round\" stroke-width=\"3\"/>\n<path d=\"M40 44c4-10 32-10 36 0Z\" fill=\"#a3172f\" stroke=\"#0d0608\" stroke-linejoin=\"round\" stroke-linecap=\"round\" stroke-width=\"2.6\"/>\n<circle cx=\"58\" cy=\"35\" r=\"4\" fill=\"#a3172f\" stroke=\"#0d0608\" stroke-linejoin=\"round\" stroke-linecap=\"round\" stroke-width=\"2.4\"/>\n<g transform=\"translate(49 56) scale(.9)\"><path d=\"M10 1.5a4 4 0 0 1 3.2 6.4 4 4 0 1 1-1.6 6.9c.3 1.8 1 3 2.4 4.2H6c1.4-1.2 2.1-2.4 2.4-4.2a4 4 0 1 1-1.6-6.9A4 4 0 0 1 10 1.5Z\" fill=\"#0d0608\"/></g>\n<g stroke=\"#0d0608\" stroke-linejoin=\"round\" stroke-linecap=\"round\" stroke-width=\"2.4\">\n<ellipse cx=\"22\" cy=\"124\" rx=\"17\" ry=\"4.5\" fill=\"#0d0608\"/><path d=\"M10 104h24l-3 14c-1 4-17 4-18 0Z\" fill=\"#f2ebe7\"/><ellipse cx=\"22\" cy=\"104\" rx=\"12\" ry=\"3\" fill=\"#a3172f\"/>\n<ellipse cx=\"60\" cy=\"124\" rx=\"17\" ry=\"4.5\" fill=\"#0d0608\"/><path d=\"M48 104h24l-3 14c-1 4-17 4-18 0Z\" fill=\"#f2ebe7\"/><ellipse cx=\"60\" cy=\"104\" rx=\"12\" ry=\"3\" fill=\"#a3172f\"/>\n<ellipse cx=\"98\" cy=\"124\" rx=\"17\" ry=\"4.5\" fill=\"#0d0608\"/><path d=\"M86 104h24l-3 14c-1 4-17 4-18 0Z\" fill=\"#f2ebe7\"/><ellipse cx=\"98\" cy=\"104\" rx=\"12\" ry=\"3\" fill=\"#a3172f\"/>\n</g>\n</svg>", "queen": "<svg class=\"art\" viewBox=\"0 0 120 140\" preserveAspectRatio=\"xMidYMid slice\" aria-hidden=\"true\"><defs><pattern id=\"ckfqueen\" width=\"20\" height=\"20\" patternUnits=\"userSpaceOnUse\" patternTransform=\"rotate(45)\"><rect width=\"20\" height=\"20\" fill=\"#1a0a10\"/><rect width=\"10\" height=\"10\" fill=\"#4a0d19\"/><rect x=\"10\" y=\"10\" width=\"10\" height=\"10\" fill=\"#4a0d19\"/></pattern></defs><rect width=\"120\" height=\"140\" fill=\"url(#ckfqueen)\"/>\n<path d=\"M60 84C58 104 63 118 58 140\" fill=\"none\" stroke=\"#0d0608\" stroke-linejoin=\"round\" stroke-linecap=\"round\" stroke-width=\"5\"/>\n<path d=\"M59 108c-14-10-28-6-34 2 10 6 24 8 34-2Z\" fill=\"#2a1418\" stroke=\"#0d0608\" stroke-linejoin=\"round\" stroke-linecap=\"round\" stroke-width=\"2.5\"/>\n<path d=\"M60 120c12-12 26-10 32-3-9 7-22 10-32 3Z\" fill=\"#2a1418\" stroke=\"#0d0608\" stroke-linejoin=\"round\" stroke-linecap=\"round\" stroke-width=\"2.5\"/>\n<clipPath id=\"rhfqueen\"><rect x=\"60\" y=\"20\" width=\"40\" height=\"80\"/></clipPath>\n<circle cx=\"60\" cy=\"58\" r=\"27\" fill=\"#f2ebe7\" stroke=\"#0d0608\" stroke-linejoin=\"round\" stroke-linecap=\"round\" stroke-width=\"3\"/>\n<circle cx=\"60\" cy=\"58\" r=\"27\" fill=\"#a3172f\" clip-path=\"url(#rhfqueen)\"/>\n<path d=\"M75 82v11a3 3 0 0 0 6 0V78\" fill=\"#a3172f\" stroke=\"#0d0608\" stroke-linejoin=\"round\" stroke-linecap=\"round\" stroke-width=\"2.2\"/>\n<path d=\"M65 85v6a2.5 2.5 0 0 0 5 0v-7\" fill=\"#a3172f\" stroke=\"#0d0608\" stroke-linejoin=\"round\" stroke-linecap=\"round\" stroke-width=\"2.2\"/>\n<circle cx=\"60\" cy=\"58\" r=\"27\" fill=\"none\" stroke=\"#0d0608\" stroke-linejoin=\"round\" stroke-linecap=\"round\" stroke-width=\"3\"/>\n<path d=\"M60 58c6-2 8 6 2 9-9 4-15-6-9-13 8-9 24-2 22 12-2 14-22 20-32 8-9-11-2-29 14-30\" fill=\"none\" stroke=\"#0d0608\" stroke-linejoin=\"round\" stroke-linecap=\"round\" stroke-width=\"2.6\"/>\n<g transform=\"rotate(38 96 30)\"><rect x=\"92\" y=\"-6\" width=\"8\" height=\"34\" rx=\"3\" fill=\"#0d0608\"/><rect x=\"91\" y=\"27\" width=\"10\" height=\"7\" fill=\"#d8c9c4\" stroke=\"#0d0608\" stroke-linejoin=\"round\" stroke-linecap=\"round\" stroke-width=\"2\"/><path d=\"M91 34h10l-2 11c-1 4-5 4-6 0Z\" fill=\"#a3172f\" stroke=\"#0d0608\" stroke-linejoin=\"round\" stroke-linecap=\"round\" stroke-width=\"2\"/></g>\n</svg>", "curse": "<svg class=\"art\" viewBox=\"0 0 120 140\" preserveAspectRatio=\"xMidYMid slice\" aria-hidden=\"true\"><defs><pattern id=\"ckfcurse\" width=\"20\" height=\"20\" patternUnits=\"userSpaceOnUse\" patternTransform=\"rotate(45)\"><rect width=\"20\" height=\"20\" fill=\"#1a0a10\"/><rect width=\"10\" height=\"10\" fill=\"#4a0d19\"/><rect x=\"10\" y=\"10\" width=\"10\" height=\"10\" fill=\"#4a0d19\"/></pattern></defs><rect width=\"120\" height=\"140\" fill=\"url(#ckfcurse)\"/>\n<path d=\"M60 10c12 18 44 32 44 58 0 15-11 24-24 24-8 0-14-4-18-9 1 10 5 17 13 23H45c8-6 12-13 13-23-4 5-10 9-18 9-13 0-24-9-24-24 0-26 32-40 44-58Z\" fill=\"#f2ebe7\" stroke=\"#0d0608\" stroke-linejoin=\"round\" stroke-linecap=\"round\" stroke-width=\"3\"/>\n<path d=\"M60 48c-4-8-2-16 6-22\" fill=\"none\" stroke=\"#d8c9c4\" stroke-width=\"3\" stroke-dasharray=\"3 3\" stroke-linecap=\"round\"/>\n<rect x=\"55\" y=\"40\" width=\"10\" height=\"7\" rx=\"2\" fill=\"#a3172f\" stroke=\"#0d0608\" stroke-linejoin=\"round\" stroke-linecap=\"round\" stroke-width=\"2.4\"/>\n<circle cx=\"60\" cy=\"68\" r=\"21\" fill=\"#a3172f\" stroke=\"#0d0608\" stroke-linejoin=\"round\" stroke-linecap=\"round\" stroke-width=\"3\"/>\n<circle cx=\"60\" cy=\"68\" r=\"15.5\" fill=\"#f2ebe7\" stroke=\"#0d0608\" stroke-linejoin=\"round\" stroke-linecap=\"round\" stroke-width=\"2.4\"/>\n<g stroke=\"#0d0608\" stroke-linejoin=\"round\" stroke-linecap=\"round\" stroke-width=\"2\">\n<path d=\"M60 54.5v3.5M60 78v3.5M46.5 68H50M70 68h3.5\"/>\n<path d=\"M60 68 60 59M60 68l6 3\" stroke-width=\"2.6\"/>\n</g>\n<path d=\"M50 58l6 5-3 4 7 4-2 5 6 4\" fill=\"none\" stroke=\"#5e0c1a\" stroke-width=\"1.6\" stroke-linejoin=\"round\"/>\n</svg>", "confession": "<svg class=\"art\" viewBox=\"0 0 120 140\" preserveAspectRatio=\"xMidYMid slice\" aria-hidden=\"true\"><defs><pattern id=\"ckfconfession\" width=\"20\" height=\"20\" patternUnits=\"userSpaceOnUse\" patternTransform=\"rotate(45)\"><rect width=\"20\" height=\"20\" fill=\"#1a0a10\"/><rect width=\"10\" height=\"10\" fill=\"#4a0d19\"/><rect x=\"10\" y=\"10\" width=\"10\" height=\"10\" fill=\"#4a0d19\"/></pattern></defs><rect width=\"120\" height=\"140\" fill=\"url(#ckfconfession)\"/>\n<path d=\"M60 16C38 16 30 38 32 56 24 80 18 112 12 140h96c-6-28-12-60-20-84 2-18-6-40-28-40Z\" fill=\"#a3172f\" stroke=\"#0d0608\" stroke-linejoin=\"round\" stroke-linecap=\"round\" stroke-width=\"3\"/>\n<path d=\"M44 76c-4 18-8 40-12 64M76 76c4 18 8 40 12 64M60 92v48\" fill=\"none\" stroke=\"#5e0c1a\" stroke-width=\"3\" stroke-linecap=\"round\"/>\n<ellipse cx=\"60\" cy=\"56\" rx=\"17\" ry=\"21\" fill=\"#0d0608\"/>\n<g transform=\"translate(47 47) scale(.55)\"><path d=\"M10 18C4 13 1 10 1 6.2 1 3.5 3 1.6 5.6 1.6c2 0 3.5 1.2 4.4 2.8.9-1.6 2.4-2.8 4.4-2.8C17 1.6 19 3.5 19 6.2 19 10 16 13 10 18Z\" fill=\"#e8679f\"/></g>\n<g transform=\"translate(62 47) scale(.55)\"><path d=\"M10 18C4 13 1 10 1 6.2 1 3.5 3 1.6 5.6 1.6c2 0 3.5 1.2 4.4 2.8.9-1.6 2.4-2.8 4.4-2.8C17 1.6 19 3.5 19 6.2 19 10 16 13 10 18Z\" fill=\"#e8679f\"/></g>\n<path d=\"M48 80c4 6 20 6 24 0l-4 10H52Z\" fill=\"#f2ebe7\" stroke=\"#0d0608\" stroke-linejoin=\"round\" stroke-linecap=\"round\" stroke-width=\"2.4\"/>\n</svg>", "prickett": "<svg class=\"art\" viewBox=\"0 0 120 140\" preserveAspectRatio=\"xMidYMid slice\" aria-hidden=\"true\"><defs><pattern id=\"ckfprickett\" width=\"20\" height=\"20\" patternUnits=\"userSpaceOnUse\" patternTransform=\"rotate(45)\"><rect width=\"20\" height=\"20\" fill=\"#1a0a10\"/><rect width=\"10\" height=\"10\" fill=\"#4a0d19\"/><rect x=\"10\" y=\"10\" width=\"10\" height=\"10\" fill=\"#4a0d19\"/></pattern></defs><rect width=\"120\" height=\"140\" fill=\"url(#ckfprickett)\"/>\n<path d=\"M60 8 112 70 60 132 8 70Z\" fill=\"#f2ebe7\" stroke=\"#0d0608\" stroke-linejoin=\"round\" stroke-linecap=\"round\" stroke-width=\"3\"/>\n<clipPath id=\"khfprickett\"><circle cx=\"60\" cy=\"56\" r=\"17\"/><path d=\"M51 66 44 106h32l-7-40Z\"/></clipPath>\n<g clip-path=\"url(#khfprickett)\">\n<rect x=\"30\" y=\"30\" width=\"60\" height=\"90\" fill=\"#0d0608\"/>\n<path d=\"M40 44h12v8h-8v8h16v-16h8v24h-8v8H48v8h16v8H44v8h28v-8h-6M56 36v8M72 52h8v16M36 76h8M64 84h12v12\" fill=\"none\" stroke=\"#a3172f\" stroke-width=\"3\" stroke-linecap=\"square\"/>\n</g>\n<circle cx=\"60\" cy=\"56\" r=\"17\" fill=\"none\" stroke=\"#0d0608\" stroke-linejoin=\"round\" stroke-linecap=\"round\" stroke-width=\"3\"/>\n<path d=\"M51 69 44 106h32l-7-37\" fill=\"none\" stroke=\"#0d0608\" stroke-linejoin=\"round\" stroke-linecap=\"round\" stroke-width=\"3\"/>\n</svg>", "cheshire": "<svg class=\"art\" viewBox=\"0 0 120 140\" preserveAspectRatio=\"xMidYMid slice\" aria-hidden=\"true\"><defs><pattern id=\"ckfcheshire\" width=\"20\" height=\"20\" patternUnits=\"userSpaceOnUse\" patternTransform=\"rotate(45)\"><rect width=\"20\" height=\"20\" fill=\"#1a0a10\"/><rect width=\"10\" height=\"10\" fill=\"#4a0d19\"/><rect x=\"10\" y=\"10\" width=\"10\" height=\"10\" fill=\"#4a0d19\"/></pattern></defs><rect width=\"120\" height=\"140\" fill=\"url(#ckfcheshire)\"/>\n<path d=\"M14 30c30-16 70-16 96 4M8 120c30 14 74 12 104-6\" fill=\"none\" stroke=\"#b0386f\" stroke-width=\"9\" stroke-linecap=\"round\" opacity=\".55\"/>\n<path d=\"M30 46c6-8 18-8 22 2-6 6-16 6-22-2Z\" fill=\"#e8679f\" stroke=\"#0d0608\" stroke-linejoin=\"round\" stroke-linecap=\"round\" stroke-width=\"2.6\"/>\n<path d=\"M68 48c4-10 16-10 22-2-6 8-16 8-22 2Z\" fill=\"#e8679f\" stroke=\"#0d0608\" stroke-linejoin=\"round\" stroke-linecap=\"round\" stroke-width=\"2.6\"/>\n<path d=\"M41 42v10M79 42v10\" stroke=\"#0d0608\" stroke-width=\"3\" stroke-linecap=\"round\"/>\n<path d=\"M14 66c18 44 74 44 92 0-20 18-72 18-92 0Z\" fill=\"#f2ebe7\" stroke=\"#0d0608\" stroke-linejoin=\"round\" stroke-linecap=\"round\" stroke-width=\"3\"/>\n<g stroke=\"#0d0608\" stroke-width=\"2.2\" stroke-linecap=\"round\">\n<path d=\"M26 76l2 10M36 81l1 12M47 84v13M58 85v14M69 84v13M80 81l-1 12M91 76l-2 10\"/>\n</g>\n</svg>"};
+const PIP_NOTE = {"heart": "<svg viewBox=\"0 0 20 20\" width=\"20\" height=\"20\" aria-hidden=\"true\"><path d=\"M10 18C4 13 1 10 1 6.2 1 3.5 3 1.6 5.6 1.6c2 0 3.5 1.2 4.4 2.8.9-1.6 2.4-2.8 4.4-2.8C17 1.6 19 3.5 19 6.2 19 10 16 13 10 18Z\" fill=\"#e8679f\"/></svg>", "diamond": "<svg viewBox=\"0 0 20 20\" width=\"20\" height=\"20\" aria-hidden=\"true\"><path d=\"M10 1 17.5 10 10 19 2.5 10Z\" fill=\"#e8679f\"/></svg>", "spade": "<svg viewBox=\"0 0 20 20\" width=\"20\" height=\"20\" aria-hidden=\"true\"><path d=\"M10 1c3 4.5 9 7.5 9 11.5 0 2.5-1.8 4.1-4 4.1-1.4 0-2.6-.6-3.4-1.6.3 1.8 1 3 2.4 4H6c1.4-1 2.1-2.2 2.4-4-.8 1-2 1.6-3.4 1.6-2.2 0-4-1.6-4-4.1C1 8.5 7 5.5 10 1Z\" fill=\"#e8679f\"/></svg>", "club": "<svg viewBox=\"0 0 20 20\" width=\"20\" height=\"20\" aria-hidden=\"true\"><path d=\"M10 1.5a4 4 0 0 1 3.2 6.4 4 4 0 1 1-1.6 6.9c.3 1.8 1 3 2.4 4.2H6c1.4-1.2 2.1-2.4 2.4-4.2a4 4 0 1 1-1.6-6.9A4 4 0 0 1 10 1.5Z\" fill=\"#e8679f\"/></svg>"};
+const PIP = {"heart": "<svg viewBox=\"0 0 20 20\" width=\"20\" height=\"20\" aria-hidden=\"true\"><path d=\"M10 18C4 13 1 10 1 6.2 1 3.5 3 1.6 5.6 1.6c2 0 3.5 1.2 4.4 2.8.9-1.6 2.4-2.8 4.4-2.8C17 1.6 19 3.5 19 6.2 19 10 16 13 10 18Z\" fill=\"#a3172f\"/></svg>", "diamond": "<svg viewBox=\"0 0 20 20\" width=\"20\" height=\"20\" aria-hidden=\"true\"><path d=\"M10 1 17.5 10 10 19 2.5 10Z\" fill=\"#a3172f\"/></svg>", "spade": "<svg viewBox=\"0 0 20 20\" width=\"20\" height=\"20\" aria-hidden=\"true\"><path d=\"M10 1c3 4.5 9 7.5 9 11.5 0 2.5-1.8 4.1-4 4.1-1.4 0-2.6-.6-3.4-1.6.3 1.8 1 3 2.4 4H6c1.4-1 2.1-2.2 2.4-4-.8 1-2 1.6-3.4 1.6-2.2 0-4-1.6-4-4.1C1 8.5 7 5.5 10 1Z\" fill=\"#0d0608\"/></svg>", "club": "<svg viewBox=\"0 0 20 20\" width=\"20\" height=\"20\" aria-hidden=\"true\"><path d=\"M10 1.5a4 4 0 0 1 3.2 6.4 4 4 0 1 1-1.6 6.9c.3 1.8 1 3 2.4 4.2H6c1.4-1.2 2.1-2.4 2.4-4.2a4 4 0 1 1-1.6-6.9A4 4 0 0 1 10 1.5Z\" fill=\"#0d0608\"/></svg>"};
+const I18N = {"en": {"navWork": "Other work", "navContact": "Contact", "role": "English to Turkish game localization", "lede": "I translate games, broadcast subtitles and long-form fiction into Turkish. The deck holds six scenes from a mature-rated dark fairy-tale RPG I localized. Pick a card to read the dialogue as it plays in the game.", "cv": "Download CV", "hire": "Get in touch", "pick": "Pick a card.", "workH": "Other work", "workIntro": "Subtitles for national television, a full web novel, and years of community translation.", "w1t": "2024 to now", "w1h": "Indie game localization", "w1p": "Three indie games, about 80,000 words, localized with their developers and delivered as final in-build text: extraction, character limits, cultural adaptation of dialogue and UI.", "w2t": "2023", "w2h": "Subtitle writer, TRT 1", "w2p": "Wrote and proofread closed captions for national broadcast, following accessibility standards for deaf and hard-of-hearing viewers.", "w3t": "Six months", "w3h": "Web novel translation", "w3p": "A full-length web novel of about 26,000 words, translated alone with one voice and one glossary from the first chapter to the last.", "w4t": "500+ releases", "w4h": "Anime and manga", "w4p": "Episodes and chapters translated from English for community releases, keeping tone, idiom and honorifics.", "w5t": "Since 2025", "w5h": "Bilkent Translation Society", "w5p": "Board member. I run translation workshops, coordinate volunteer translators and review submissions for terminology and quality.", "w6t": "Bilkent University", "w6h": "Education and languages", "w6p": "B.Sc. student in Mechanical Engineering. Turkish native, English C1.", "k1": "Localization:", "k2": "Subtitling:", "k3": "Quality:", "k3v": "proofreading, terminology management, style guide compliance, SDH standards", "ctH": "Contact", "ctNote": "Open to freelance and in-house work in game localization, LQA and subtitling.", "cvPdf": "Download CV (PDF)", "foot": "Dialogue excerpts come from a game I localized into Turkish. Its characters and story belong to their creators. All illustrations on this page are original.", "codes": "Show engine codes", "prev": "Previous card", "next": "Next card", "close": "Close", "notesH": "Translator's notes", "dialogLabel": "Dialogue", "open": "Opens the dialogue.", "player": "player's name", "choice": "Choice", "docTitle": "Yusuf Dökmeci, game localization", "cvMail": "Downloads aren't available in this view, so your mail app will open to request the CV.", "musicOn": "Play music", "musicOff": "Pause music", "musicFail": "Music can't play in this view.", "cvSaved": "CV saved.", "cvBusy": "A save prompt is already open.", "cvFail": "The CV couldn't be saved here. Email me and I'll send it."}, "tr": {"navWork": "Diğer işler", "navContact": "İletişim", "role": "İngilizceden Türkçeye oyun yerelleştirme", "lede": "Oyunları, yayın altyazılarını ve uzun soluklu kurguyu Türkçeye çeviriyorum. Destede, yerelleştirdiğim yetişkinlere yönelik karanlık bir masal RPG'sinden altı sahne var. Diyaloğu oyundaki haliyle okumak için bir kart seç.", "cv": "CV'yi indir", "hire": "Bana ulaş", "pick": "Bir kart seç.", "workH": "Diğer işler", "workIntro": "Ulusal televizyon için altyazılar, baştan sona bir web romanı ve yıllara yayılan topluluk çevirileri.", "w1t": "2024'ten beri", "w1h": "Bağımsız oyun yerelleştirme", "w1p": "Geliştiricileriyle birlikte yerelleştirilen üç bağımsız oyun, yaklaşık 80.000 kelime, oyun içi son metin olarak teslim edildi: metin çıkarma, karakter sınırları, diyalog ve arayüzün kültürel uyarlaması.", "w2t": "2023", "w2h": "Altyazı yazarı, TRT 1", "w2p": "Ulusal yayın için, işitme engelli izleyicilere yönelik erişilebilirlik standartlarına uygun kapalı altyazılar yazdım ve son okumalarını yaptım.", "w3t": "Altı ay", "w3h": "Web romanı çevirisi", "w3p": "Yaklaşık 26.000 kelimelik bir web romanını tek başıma, ilk bölümden sonuncusuna tek bir ses ve tek bir terim listesiyle çevirdim.", "w4t": "500+ bölüm", "w4h": "Anime ve manga", "w4p": "Topluluk yayınları için İngilizceden çevrilen bölümler; ton, deyimler ve hitap ekleri korunarak.", "w5t": "2025'ten beri", "w5h": "Bilkent Çeviri Topluluğu", "w5p": "Yönetim kurulu üyesiyim. Çeviri atölyeleri düzenliyor, gönüllü çevirmenleri koordine ediyor, gönderileri terim tutarlılığı ve kalite açısından inceliyorum.", "w6t": "Bilkent Üniversitesi", "w6h": "Eğitim ve diller", "w6p": "Makine Mühendisliği lisans öğrencisi. Türkçe ana dil, İngilizce C1.", "k1": "Yerelleştirme:", "k2": "Altyazı:", "k3": "Kalite:", "k3v": "son okuma, terim yönetimi, stil kılavuzuna uyum, SDH standartları", "ctH": "İletişim", "ctNote": "Oyun yerelleştirme, LQA ve altyazı alanında serbest ya da kadrolu işlere açığım.", "cvPdf": "CV'yi indir (PDF)", "foot": "Diyalog alıntıları Türkçeye yerelleştirdiğim bir oyundan alınmıştır. Karakterler ve hikâye yaratıcılarına aittir. Bu sayfadaki tüm çizimler özgündür.", "codes": "Motor kodlarını göster", "prev": "Önceki kart", "next": "Sonraki kart", "close": "Kapat", "notesH": "Çevirmen notları", "dialogLabel": "Diyalog", "open": "Diyaloğu açar.", "player": "oyuncunun adı", "choice": "Seçim", "docTitle": "Yusuf Dökmeci, oyun yerelleştirme", "cvMail": "Bu görünümde indirme yapılamıyor; CV'yi istemek için e-posta uygulaman açılacak.", "musicOn": "Müziği aç", "musicOff": "Müziği durdur", "musicFail": "Müzik bu görünümde çalınamıyor.", "cvSaved": "CV kaydedildi.", "cvBusy": "Zaten açık bir kaydetme penceresi var.", "cvFail": "CV burada kaydedilemedi. E-posta at, göndereyim."}};
+const CV_B64 = "";
+const CV_FILE = "Yusuf_Dokmeci_CV.pdf";
+
+let lang = "en";
+try { const s = localStorage.getItem("yd-lang"); if (s === "tr" || s === "en") lang = s; } catch (e) {}
+
+const $ = (s, r = document) => r.querySelector(s);
+const esc = s => s.replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+const t = k => (I18N[lang] && I18N[lang][k]) || I18N.en[k] || "";
+const L = o => (typeof o === "string" ? o : (o[lang] || o.en));
+
+function indexHTML(c, cls) {
+  if (c.suit === "joker") return '<span class="joker">JOKER</span>';
+  return "<b>" + c.rank + "</b>" + PIP[c.suit];
+}
+function faceHTML(c, alt) {
+  const red = c.suit === "heart" || c.suit === "diamond" ? " red" : "";
+  return '<span class="idx tl' + red + '">' + indexHTML(c) + "</span>" +
+    '<span class="spacer"></span><span class="art-wrap">' + (alt ? ART_F : ART)[c.id] + "</span>" +
+    '<span class="ttl">' + esc(L(c.title)) + "</span>" +
+    '<span class="idx br' + red + '">' + indexHTML(c) + "</span>";
+}
+
+/* deal the fan */
+const fan = $("#fan");
+const n = CARDS.length;
+CARDS.forEach((c, i) => {
+  const b = document.createElement("button");
+  b.type = "button"; b.className = "card"; b.setAttribute("role", "listitem");
+  const k = i - (n - 1) / 2;
+  b.style.setProperty("--i", i);
+  b.style.setProperty("--rot", (k * 8.5) + "deg");
+  b.style.setProperty("--tx", (k * 70) + "px");
+  b.style.setProperty("--ty", (k * k * 6) + "px");
+  b.dataset.idx = i;
+  b.innerHTML = '<span class="face">' + faceHTML(c) + "</span>";
+  b.addEventListener("click", () => openCard(i, b));
+  fan.appendChild(b);
+});
+function labelCards() {
+  fan.querySelectorAll(".card").forEach((b, i) => {
+    const c = CARDS[i];
+    b.querySelector(".ttl").textContent = L(c.title);
+    b.setAttribute("aria-label", L(c.title) + ". " + t("open"));
+  });
+}
+
+/* text with RPG Maker control codes */
+const TOKEN = /(\\c\[\d+\]|\\n\[\d+\]|\\!|\\\.|\\\||\n)/;
+let raw = false;
+const compact = () => window.matchMedia("(max-width: 640px)").matches;
+function renderText(text) {
+  let out = "", red = false;
+  for (const p of text.split(TOKEN)) {
+    if (!p) continue;
+    if (p === "\n") { out += raw ? '<span class="nl">\u21B5</span><br>' : (compact() ? " " : "<br>"); continue; }
+    const m = p.match(/^\\c\[(\d+)\]$/);
+    if (m) { if (raw) out += '<span class="code">' + esc(p) + "</span>"; else red = m[1] !== "0"; continue; }
+    if (/^\\n\[\d+\]$/.test(p)) { out += raw ? '<span class="code">' + esc(p) + "</span>" : '<span class="ph">' + esc(t("player")) + "</span>"; continue; }
+    if (/^\\[!.|]$/.test(p)) { if (raw) out += '<span class="code">' + esc(p) + "</span>"; continue; }
+    out += (!raw && red) ? '<span class="red">' + esc(p) + "</span>" : esc(p);
+  }
+  return out;
+}
+
+let current = -1, opener = null, busy = false;
+const stage = $("#stage"), flip = $("#flip"), dialog = $("#dialog");
+const reduce = () => window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+function fillSheet(i) {
+  const c = CARDS[i];
+  const red = c.suit === "heart" || c.suit === "diamond";
+  const mini = $("#sheetMini");
+  mini.className = "mini" + (red ? " red" : "");
+  mini.innerHTML = indexHTML(c);
+  $("#sheetTitle").textContent = L(c.title);
+  $("#sheetSub").textContent = L(c.sub);
+  $("#notes").innerHTML = c.notes.map(nt => "<li>" + PIP_NOTE[c.suit === "joker" ? "spade" : c.suit] + "<span>" + L(nt) + "</span></li>").join("");
+  renderDialog(i, false);
+}
+function renderDialog(i, play) {
+  const c = CARDS[i];
+  dialog.className = "dialog" + (c.layout === "chat" ? " chat" : "");
+  let h = "", k = 0;
+  for (const e of c.lines) {
+    const st = ' style="--n:' + (k++) + '"';
+    if (e.dir) { h += '<p class="dir"' + st + ">" + esc(L(e.dir)) + "</p>"; continue; }
+    if (e.mid) { h += '<div class="msg mid"' + st + ">" + renderText(e.mid) + "</div>"; continue; }
+    if (e.choice) { h += '<div class="msg choice"' + st + '><span class="who">' + esc(t("choice")) + "</span>" + e.choice.map(x => "<span>" + esc(x) + "</span>").join("") + "</div>"; continue; }
+    if (e.nar) { h += '<div class="msg dark"' + st + ">" + renderText(e.nar) + "</div>"; continue; }
+    const side = c.layout === "chat" ? (e.side === "r" ? " right" : " left") : "";
+    h += '<div class="msg' + side + '"' + st + '><span class="who">' + esc(e.sp) + "</span>" + renderText(e.t) + "</div>";
+  }
+  dialog.innerHTML = h;
+  dialog.scrollTop = 0;
+  dialog.classList.toggle("play", !!play && !reduce());
+}
+
+function rectOf(el) { const r = el.getBoundingClientRect(); return { l: r.left, t: r.top, w: r.width, h: r.height }; }
+function place(r, transform) {
+  flip.style.left = r.l + "px"; flip.style.top = r.t + "px";
+  flip.style.width = r.w + "px"; flip.style.height = r.h + "px";
+  flip.style.transform = transform;
+}
+function fullRect() {
+  const m = Math.max(10, Math.min(28, window.innerWidth * 0.02));
+  return { l: m, t: m, w: window.innerWidth - m * 2, h: window.innerHeight - m * 2 };
+}
+
+function openCard(i, btn) {
+  if (busy) return;
+  current = i; opener = btn;
+  const c = CARDS[i];
+  $("#flipFront").className = "face";
+  $("#flipFront").innerHTML = faceHTML(c, true);
+  fillSheet(i);
+  stage.hidden = false;
+  document.body.style.overflow = "hidden";
+  const rot = getComputedStyle(btn).getPropertyValue("--rot").trim() || "0deg";
+  const narrow = window.matchMedia("(max-width: 900px)").matches;
+  const r = rectOf(btn.querySelector(".face"));
+  btn.style.visibility = "hidden";
+  if (reduce()) {
+    place(fullRect(), "rotateY(180deg)");
+    stage.classList.add("open", "done");
+    renderDialog(i, false);
+    $("#close").focus();
+    return;
+  }
+  busy = true;
+  flip.style.transition = "none";
+  place(r, "rotateZ(" + (narrow ? "0deg" : rot) + ") rotateY(0deg)");
+  flip.offsetWidth;
+  flip.style.transition = "";
+  requestAnimationFrame(() => {
+    stage.classList.add("open");
+    place(fullRect(), "rotateZ(0deg) rotateY(180deg)");
+  });
+  setTimeout(() => {
+    stage.classList.add("done");
+    renderDialog(i, true);
+    busy = false;
+    $("#close").focus();
+  }, 920);
+}
+
+function closeCard() {
+  if (busy || current < 0) return;
+  const btn = opener;
+  const finish = () => {
+    stage.hidden = true; stage.classList.remove("open", "done");
+    document.body.style.overflow = "";
+    if (btn) { btn.style.visibility = ""; btn.focus({ preventScroll: true }); }
+    current = -1; busy = false;
+  };
+  if (reduce() || !btn) { finish(); return; }
+  busy = true;
+  stage.classList.remove("done");
+  const rot = getComputedStyle(btn).getPropertyValue("--rot").trim() || "0deg";
+  const narrow = window.matchMedia("(max-width: 900px)").matches;
+  btn.style.visibility = "hidden";
+  const r = rectOf(btn.querySelector(".face"));
+  $("#flipFront").innerHTML = faceHTML(CARDS[Number(btn.dataset.idx)], true);
+  stage.classList.remove("open");
+  place(r, "rotateZ(" + (narrow ? "0deg" : rot) + ") rotateY(0deg)");
+  setTimeout(finish, 900);
+}
+
+function step(d) {
+  if (busy || current < 0) return;
+  const i = (current + d + n) % n;
+  current = i;
+  opener = fan.children[i];
+  fan.querySelectorAll(".card").forEach(b => { b.style.visibility = ""; });
+  opener.style.visibility = "hidden";
+  fillSheet(i);
+  renderDialog(i, true);
+}
+
+$("#close").addEventListener("click", closeCard);
+stage.querySelector("[data-close]").addEventListener("click", closeCard);
+$("#prev").addEventListener("click", () => step(-1));
+$("#next").addEventListener("click", () => step(1));
+$("#codes").addEventListener("click", e => {
+  raw = !raw; e.currentTarget.setAttribute("aria-pressed", String(raw));
+  if (current >= 0) renderDialog(current, false);
+});
+document.addEventListener("keydown", e => {
+  if (stage.hidden) return;
+  if (e.key === "Escape") { e.preventDefault(); closeCard(); }
+  else if (e.key === "ArrowRight" && e.target.tagName !== "INPUT") step(1);
+  else if (e.key === "ArrowLeft" && e.target.tagName !== "INPUT") step(-1);
+  else if (e.key === "Tab") {
+    const f = [...stage.querySelectorAll(".sheet button, .sheet [tabindex='0']")].filter(x => x.offsetParent !== null);
+    if (!f.length) return;
+    const first = f[0], last = f[f.length - 1];
+    if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+    else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+  }
+});
+window.addEventListener("resize", () => { if (!stage.hidden && stage.classList.contains("done")) place(fullRect(), "rotateZ(0deg) rotateY(180deg)"); });
+
+/* language */
+function applyLang(l) {
+  lang = l;
+  document.documentElement.lang = l;
+  try { localStorage.setItem("yd-lang", l); } catch (e) {}
+  document.querySelectorAll(".lang button").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.lang === l)));
+  document.querySelectorAll("[data-i18n]").forEach(el => { const v = t(el.dataset.i18n); if (v) el.textContent = v; });
+  document.querySelectorAll("[data-i18n-label]").forEach(el => el.setAttribute("aria-label", t(el.dataset.i18nLabel)));
+  document.title = t("docTitle");
+  labelCards();
+  if (current >= 0) { fillSheet(current); }
+  document.querySelectorAll("[data-status]").forEach(s => { s.textContent = ""; });
+}
+document.querySelectorAll(".lang button").forEach(b => b.addEventListener("click", () => applyLang(b.dataset.lang)));
+applyLang(lang);
+
+/* background music: off until the visitor asks for it */
+const MUSIC_B64 = "";
+const MUSIC_FILE = "music.mp3";
+const soundBtn = $("#sound");
+let audio = null, fadeT = null;
+function musicLabel(on) { soundBtn.setAttribute("aria-label", t(on ? "musicOff" : "musicOn")); soundBtn.dataset.i18nLabel = on ? "musicOff" : "musicOn"; }
+function makeAudio() {
+  const a = new Audio(); a.loop = true; a.preload = "auto"; a.volume = 0;
+  if (MUSIC_FILE) { a.src = MUSIC_FILE; return a; }
+  const bin = atob(MUSIC_B64); const bytes = new Uint8Array(bin.length);
+  for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+  a.src = URL.createObjectURL(new Blob([bytes], { type: "audio/mpeg" }));
+  return a;
+}
+function fadeTo(target, done) {
+  clearInterval(fadeT);
+  fadeT = setInterval(() => {
+    const v = audio.volume + (target > audio.volume ? 0.04 : -0.05);
+    if ((target > audio.volume && v >= target) || (target <= audio.volume && v <= target)) {
+      audio.volume = Math.max(0, Math.min(1, target)); clearInterval(fadeT); if (done) done();
+    } else audio.volume = Math.max(0, Math.min(1, v));
+  }, 60);
+}
+async function tryPlay() {
+  try { await audio.play(); return true; } catch (e) {}
+  if (!MUSIC_B64) return false;
+  try { audio.src = "data:audio/mpeg;base64," + MUSIC_B64; await audio.play(); return true; } catch (e) { return false; }
+}
+soundBtn.addEventListener("click", async () => {
+  const on = soundBtn.getAttribute("aria-pressed") === "true";
+  if (on) {
+    soundBtn.setAttribute("aria-pressed", "false"); musicLabel(false);
+    fadeTo(0, () => audio.pause());
+    return;
+  }
+  if (!audio) audio = makeAudio();
+  const ok = await tryPlay();
+  if (!ok) { say(t("musicFail")); soundBtn.hidden = true; return; }
+  soundBtn.setAttribute("aria-pressed", "true"); musicLabel(true);
+  fadeTo(0.18);
+});
+
+/* CV download through the viewer's save prompt */
+let downloads = null;
+const cvButtons = document.querySelectorAll(".cv-btn");
+function say(msg) { document.querySelectorAll("[data-status]").forEach(s => { s.textContent = ""; }); const s = document.activeElement && document.activeElement.closest(".actions") ? document.activeElement.closest(".actions").parentElement.querySelector("[data-status]") : null; (s || document.querySelector("[data-status]")).textContent = msg; }
+cvButtons.forEach(b => b.addEventListener("click", async () => {
+  if (CV_FILE) { const a = document.createElement("a"); a.href = CV_FILE; a.download = CV_FILE; document.body.appendChild(a); a.click(); a.remove(); return; }
+  if (!downloads) { say(t("cvMail")); window.location.href = "mailto:yusuf.dokmeci@bilkent.edu.tr?subject=CV"; return; }
+  try {
+    const bin = atob(CV_B64); const bytes = new Uint8Array(bin.length);
+    for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+    const res = await downloads.save({ filename: "Yusuf_Dokmeci_CV.pdf", data: new Blob([bytes], { type: "application/pdf" }) });
+    if (res && res.status === "saved") say(t("cvSaved"));
+  } catch (err) {
+    const code = err && err.code;
+    if (code === "declined") return;
+    if (code === "rate_limited") { say(t("cvBusy")); return; }
+    say(t("cvFail"));
+  }
+}));
+if (window.claude && typeof window.claude.use === "function") {
+  window.claude.use("downloads").then(d => { downloads = d; }).catch(() => { downloads = null; });
+}
+</script>
+</body>
+</html>
